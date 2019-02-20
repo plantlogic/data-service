@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  dataservice:
+    build: ./
+    restart: always
+    depends_on:
+      - datadb
+    networks:
+      datanet:
+    ports:
+      - 127.0.0.1:8080:8080
+  datadb:
+    image: 'mongo:4'
+    restart: always
+    networks:
+      datanet:
+        aliases:
+        - datadb
+    volumes:
+      - ./mongodb:/data/db
+
+networks:
+  datanet:
