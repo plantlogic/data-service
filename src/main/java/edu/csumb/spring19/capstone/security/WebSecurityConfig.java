@@ -18,7 +18,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // TODO: Change last permitAll to authenticated when authentication is working
-        http.authorizeRequests().antMatchers("/signin").permitAll().anyRequest().permitAll();
+        http.authorizeRequests().antMatchers("/signin").permitAll().anyRequest().permitAll()
+        .and().csrf().disable();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

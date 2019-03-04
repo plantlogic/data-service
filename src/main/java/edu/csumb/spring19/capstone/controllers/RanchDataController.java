@@ -1,7 +1,7 @@
 package edu.csumb.spring19.capstone.controllers;
 
 import javax.validation.Valid;
-import edu.csumb.spring19.capstone.ranch.RanchData;
+import edu.csumb.spring19.capstone.models.RanchData;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,39 +19,55 @@ public class RanchDataController{
 
     @GetMapping("/ranches")
     public List<RanchData> getAllRanchData() {
-        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        return ranchRepository.findAll(sortByCreatedAtDesc);
+        Sort sortByRanchName = new Sort(Sort.Direction.ASC, "ranchName");
+        return ranchRepository.findAll(sortByRanchName);
+    }
+
+    @GetMapping("/ranches/{ranchName}")
+    public List<RanchData> getRanchDataByRanchName(@PathVariable("ranchName") String ranchName) {
+        return ranchRepository.findByRanchName(ranchName);
     }
 
     @PostMapping("/ranches")
     public RanchData createRanchData(@Valid @RequestBody RanchData ranchData) {
         return ranchRepository.save(ranchData);
     }
-    @GetMapping("/ranches/{plotID}")
-    public ResponseEntity<RanchData> getRanchDataByID(@PathVariable("plotID") String plotID) {
-        return ranchRepository.findById(plotID)
-            .map(ranchData -> ResponseEntity.ok().body(ranchData))
-            .orElse(ResponseEntity.notFound().build());
-    }
-   
+
     @PutMapping("/ranches/{id}")
-    public ResponseEntity<RanchData> updateRanchData(@PathVariable("plotID") String plotID, @Valid @RequestBody RanchData ranch) {
-        return ranchRepository.findById(plotID)
+    public ResponseEntity<RanchData> updateRanchData(@PathVariable("id") String id, @Valid @RequestBody RanchData ranch) {
+        return ranchRepository.findById(id)
             .map(ranchData -> {
-                ranchData.setAcres(ranch.getAcres());
-                ranchData.setLotNumber(ranch.getLotNumber());
                 ranchData.setRanchName(ranch.getRanchName());
-                ranchData.setCommodities(ranch.getCommodities());
-                ranchData.setVarieties(ranch.getVarieties());
+                ranchData.setRanchManagerName(ranch.getRanchManagerName());
+                ranchData.setIrrigationData(ranch.getIrrigationData());
+                ranchData.setTractorData(ranch.getTractorData());
+                ranchData.setLotNumber(ranch.getLotNumber());
+                ranchData.setTotalAcres(ranch.getTotalAcres());
+                ranchData.setCropYear(ranch.getCropYear());
+                ranchData.setCommodity(ranch.getCommodity());
+                ranchData.setVariety(ranch.getVariety());
+                ranchData.setCropAcres(ranch.getCropAcres());
+                ranchData.setBedCount(ranch.getBedCount());
+                ranchData.setSeedLotNumber(ranch.getSeedLotNumber());
+                ranchData.setBedType(ranch.getBedType());
+                ranchData.setLorsbanRate(ranch.getLorsbanRate());
+                ranchData.setDiaznonRate(ranch.getDiaznonRate());
+                ranchData.setKerbRate(ranch.getKerbRate());
+                ranchData.setDacthalRate(ranch.getDacthalRate());
+                ranchData.setWetDate(ranch.getWetDate());
+                ranchData.setThinDate(ranch.getWetDate());
+                ranchData.setHoeDate(ranch.getHoeDate());
+                ranchData.setHarvestDate(ranch.getHarvestDate());
                 RanchData updatedRanchData = ranchRepository.save(ranchData);
                 return ResponseEntity.ok().body(updatedRanchData);
             }).orElse(ResponseEntity.notFound().build());
     }
-    @DeleteMapping("/todos/{id}")
-    public ResponseEntity<?> deleteRanchData(@PathVariable("plotID") String plotID){
-        return ranchRepository.findById(plotID)
+
+    @DeleteMapping("/ranches/{id}")
+    public ResponseEntity<?> deleteRanchData(@PathVariable("id") String id){
+        return ranchRepository.findById(id)
             .map(ranch -> {
-                ranchRepository.deleteById(plotID);
+                ranchRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             }).orElse(ResponseEntity.notFound().build());
     }
