@@ -15,7 +15,7 @@ import java.util.List;
 public class RanchDataController{
 
     @Autowired
-    RanchRepository ranchRepository;
+    private RanchRepository ranchRepository;
 
     @GetMapping("/ranches")
     public List<RanchData> getAllRanchData() {

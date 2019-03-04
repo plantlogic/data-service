@@ -42,10 +42,6 @@ public class RanchData{
     private Date hoeDate = new Date();
     private Date harvestDate = new Date();
     
-    public RanchData(){
-        super();
-    }
-    
     public String getId() {
         return id;
     }
