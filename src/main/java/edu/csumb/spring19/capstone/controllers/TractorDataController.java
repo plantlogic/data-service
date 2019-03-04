@@ -15,7 +15,7 @@ import java.util.List;
 public class TractorDataController{
 
     @Autowired
-    TractorRepository tractorRepository;
+    private TractorRepository tractorRepository;
 
     @GetMapping("/tractor")
     public List<TractorData> getAllTractorData() {

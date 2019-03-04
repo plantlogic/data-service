@@ -15,7 +15,7 @@ import java.util.List;
 public class IrrigationDataController{
 
     @Autowired
-    IrrigationRepository irrigationRepository;
+    private IrrigationRepository irrigationRepository;
 
     @GetMapping("/irrigation")
     public List<IrrigationData> getAllIrrigationData() {
