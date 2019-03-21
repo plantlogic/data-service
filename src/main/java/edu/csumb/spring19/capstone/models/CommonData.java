@@ -19,6 +19,12 @@ public class CommonData{
     private List<String> insecticides;
     private List<String> herbicides;
 
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
     public List<String> getRanches() {
         return ranches;
     }
