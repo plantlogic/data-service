@@ -9,3 +9,4 @@ import java.util.List;
 public interface RanchRepository extends MongoRepository<RanchData, String>{
     List<RanchData> findByRanchName(String ranchName);
 }
+
