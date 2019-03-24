@@ -15,17 +15,17 @@ public class CommonDataController{
     @Autowired
     private CommonRepository commonRepository;
 
-    @GetMapping({"/USER_MANAGEMENT/common", "/APP_ADMIN/common"})
+    @GetMapping("/view/common")
     public List<CommonData> getAllCommonData() {
         return commonRepository.findAll();
     }
 
-    @PostMapping("/APP_ADMIN/common")
+    @PostMapping("/admin/common")
     public CommonData createCommonData(@Valid @RequestBody CommonData commonData) {
         return commonRepository.save(commonData);
     }
 
-    @PutMapping({"/APP_ADMIN/common/{id}"})
+    @PutMapping({"/entry/common/{id}"})
     public ResponseEntity<CommonData> updateCommonData(@PathVariable("id") String id, @Valid @RequestBody CommonData common) {
         return commonRepository.findById(id)
             .map(commonData -> {
@@ -41,7 +41,7 @@ public class CommonDataController{
             }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/APP_ADMIN/ranches/{id}")
+    @DeleteMapping("/admin/common")
     public ResponseEntity<?> deleteCommonData(@PathVariable("id") String id){
         return commonRepository.findById(id)
             .map(common -> {
