@@ -10,30 +10,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 @CrossOrigin("*")
 public class RanchDataController{
 
     @Autowired
     private RanchRepository ranchRepository;
 
-    @GetMapping("/ranches")
+    @GetMapping("/view/ranches")
     public List<RanchData> getAllRanchData() {
         Sort sortByRanchName = new Sort(Sort.Direction.ASC, "ranchName");
         return ranchRepository.findAll(sortByRanchName);
     }
 
-    @GetMapping("/ranches/{ranchName}")
+    @GetMapping("/view/ranches/{ranchName}")
     public List<RanchData> getRanchDataByRanchName(@PathVariable("ranchName") String ranchName) {
         return ranchRepository.findByRanchName(ranchName);
     }
+    //May need to add one more function to getRanchDataByRanchManager, better allowed for Data_Viewer 
 
-    @PostMapping("/ranches")
+    @PostMapping("/entry/ranches")
     public RanchData createRanchData(@Valid @RequestBody RanchData ranchData) {
         return ranchRepository.save(ranchData);
     }
 
-    @PutMapping("/ranches/{id}")
+    @PutMapping("/edit/ranches/{id}")
     public ResponseEntity<RanchData> updateRanchData(@PathVariable("id") String id, @Valid @RequestBody RanchData ranch) {
         return ranchRepository.findById(id)
             .map(ranchData -> {
@@ -63,7 +63,7 @@ public class RanchDataController{
             }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/ranches/{id}")
+    @DeleteMapping("/edit/ranches/{id}")
     public ResponseEntity<?> deleteRanchData(@PathVariable("id") String id){
         return ranchRepository.findById(id)
             .map(ranch -> {
