@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="tractor")
-@JsonIgnoreProperties(ignoreUnknown = true, value= {"id"}, allowGetters = true)
+@JsonIgnoreProperties(ignoreUnknown = true, allowGetters = true)
 public class TractorData{
 
     private Date workDate = new Date();
     private String workDone;
     private String fertilizer;
-    private Integer gallons;
+    private Float gallons;
 
     public Date getWorkDate() {
         return workDate;
@@ -31,10 +31,10 @@ public class TractorData{
     public void setFertilizer(String fertilizer){
         this.fertilizer = fertilizer;
     }
-    public Integer getGallons() {
+    public Float getGallons() {
         return gallons;
     }
-    public void setGallons(Integer gallons) {
+    public void setGallons(Float gallons) {
         this.gallons = gallons;
     }
 }
