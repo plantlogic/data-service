@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/plantlogic/data-service.svg?branch=master)](https://travis-ci.org/plantlogic/data-service) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/07ab3bedc4614786a230a665abaab8ba)](https://www.codacy.com/app/mattwebbio/data-service?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=plantlogic/data-service&amp;utm_campaign=Badge_Grade)
 [![Issues](https://img.shields.io/github/issues/plantlogic/data-service.svg?style=flat)](https://github.com/plantlogic/data-service/issues) 
 [![License](https://img.shields.io/github/license/plantlogic/data-service.svg?style=flat)](https://github.com/plantlogic/data-service/blob/master/LICENSE) 
 [![Docker Pulls](https://img.shields.io/docker/pulls/plantlogic/data-service.svg?style=flat)](https://hub.docker.com/r/plantlogic/data-service) 
