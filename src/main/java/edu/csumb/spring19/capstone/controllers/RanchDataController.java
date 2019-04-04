@@ -69,8 +69,8 @@ public class RanchDataController{
                   ranchData.setThinDate(ranch.getWetDate());
                   ranchData.setHoeDate(ranch.getHoeDate());
                   ranchData.setHarvestDate(ranch.getHarvestDate());
-                  RanchData updatedRanchData = ranchRepository.save(ranchData);
-                  return new RestData(ranchData);
+                  ranchRepository.save(ranchData);
+                  return new RestSuccess();
               });
         return data.orElse(new RestFailure("Ranch ID not found."));
     }

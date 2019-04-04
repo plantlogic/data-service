@@ -43,8 +43,8 @@ public class CommonDataController{
                   commonData.setOrganicFertilizers(common.getOrganicFertilizers());
                   commonData.setInsecticides(common.getInsecticides());
                   commonData.setHerbicides(common.getHerbicides());
-                  CommonData updatedCommonData = commonRepository.save(commonData);
-                  return new RestData(updatedCommonData);
+                  commonRepository.save(commonData);
+                  return new RestSuccess();
               });
         return data.orElse(new RestFailure("ID not found."));
     }
