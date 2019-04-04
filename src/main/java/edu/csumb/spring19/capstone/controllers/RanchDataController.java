@@ -32,8 +32,12 @@ public class RanchDataController{
     public RestDTO getRanchDataByRanchName(@PathVariable("ranchName") String ranchName) {
         return new RestData(ranchRepository.findByRanchName(ranchName));
     }
-    //May need to add one more function to getRanchDataByRanchManager, better allowed for Data_Viewer 
 
+    @GetMapping("/view/ranches/{ranchManagerName}")
+    public List<RanchData> getRanchDataByRanchManagerName(@PathVariable("ranchManagerName") String ranchManagerName) {
+        return ranchRepository.findByRanchManagerName(ranchManagerName);
+    }
+    
     @PostMapping("/entry/ranches")
     public RestDTO createRanchData(@Valid @RequestBody RanchData ranchData) {
         ranchRepository.save(ranchData);
@@ -69,6 +73,37 @@ public class RanchDataController{
                   return new RestData(ranchData);
               });
         return data.orElse(new RestFailure("Ranch ID not found."));
+    }
+    
+    @PutMapping("/admin/ranches/{id}")
+    public ResponseEntity<RanchData> updateRanchDataAdmin(@PathVariable("id") String id, @Valid @RequestBody RanchData ranch) {
+        return ranchRepository.findById(id)
+            .map(ranchData -> {
+                ranchData.setFieldID(ranch.getFieldID());
+                ranchData.setRanchName(ranch.getRanchName());
+                ranchData.setRanchManagerName(ranch.getRanchManagerName());
+                ranchData.setIrrigationData(ranch.getIrrigationData());
+                ranchData.setTractorData(ranch.getTractorData());
+                ranchData.setLotNumber(ranch.getLotNumber());
+                ranchData.setTotalAcres(ranch.getTotalAcres());
+                ranchData.setCropYear(ranch.getCropYear());
+                ranchData.setCommodity(ranch.getCommodity());
+                ranchData.setVariety(ranch.getVariety());
+                ranchData.setCropAcres(ranch.getCropAcres());
+                ranchData.setBedCount(ranch.getBedCount());
+                ranchData.setSeedLotNumber(ranch.getSeedLotNumber());
+                ranchData.setBedType(ranch.getBedType());
+                ranchData.setLorsbanRate(ranch.getLorsbanRate());
+                ranchData.setDiaznonRate(ranch.getDiaznonRate());
+                ranchData.setKerbRate(ranch.getKerbRate());
+                ranchData.setDacthalRate(ranch.getDacthalRate());
+                ranchData.setWetDate(ranch.getWetDate());
+                ranchData.setThinDate(ranch.getWetDate());
+                ranchData.setHoeDate(ranch.getHoeDate());
+                ranchData.setHarvestDate(ranch.getHarvestDate());
+                RanchData updatedRanchData = ranchRepository.save(ranchData);
+                return ResponseEntity.ok().body(updatedRanchData);
+            }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/edit/ranches/{id}")

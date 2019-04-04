@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="ranches")
-@JsonIgnoreProperties(ignoreUnknown = true, value= {"id", "isManaged"}, allowGetters = true)
+@JsonIgnoreProperties(ignoreUnknown = true, value= {"id","fieldID","ranchManagerName"}, allowGetters = true)
 public class RanchData{
     @Id
     private String id;
@@ -16,18 +16,21 @@ public class RanchData{
     private List<IrrigationData> irrigationData;
     private List<TractorData> tractorData;
 
-    private boolean isManaged = false;
+    @NotEmpty
     private String ranchName;
+    @NotEmpty
+    private Integer fieldID;
     private String ranchManagerName;
-    private Integer lotNumber;
-    private Integer totalAcres;
+    private String lotNumber;
+    private Float totalAcres;
 
     @Max(9999)
     @Min(1000)
     private Integer cropYear;
+    @NotEmpty
     private List<String> commodity;
     private List<String> variety;
-    private List<Integer> cropAcres;
+    private List<Float> cropAcres;
     private List<Integer> bedCount;
     private List<Integer> seedLotNumber;
 
@@ -60,11 +63,11 @@ public class RanchData{
     public void setTractorData(List<TractorData> tractorData) {
         this.tractorData = tractorData;
     }
-    public boolean getIsManaged() {
-        return isManaged;
+    public Integer getFieldID() {
+        return fieldID;
     }
-    public void setIsManaged(boolean isManaged) {
-        this.isManaged = isManaged;
+    public void setFieldID(Integer fieldID) {
+        this.fieldID = fieldID;
     }
     public String getRanchName(){
         return ranchName;
@@ -78,16 +81,16 @@ public class RanchData{
     public void setRanchManagerName(String ranchManagerName) {
         this.ranchManagerName = ranchManagerName;
     }
-    public Integer getLotNumber() {
+    public String getLotNumber() {
         return lotNumber;
     }
-    public void setLotNumber(Integer lotNumber) {
+    public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
     }
-    public Integer getTotalAcres() {
+    public Float getTotalAcres() {
         return totalAcres;
     }
-    public void setTotalAcres(Integer totalAcres) {
+    public void setTotalAcres(Float totalAcres) {
         this.totalAcres = totalAcres;
     }
     public Integer getCropYear() {
@@ -108,10 +111,10 @@ public class RanchData{
     public void setVariety(List<String> variety) {
         this.variety = variety;
     }
-    public List<Integer> getCropAcres() {
+    public List<Float> getCropAcres() {
         return cropAcres;
     }
-    public void setCropAcres (List<Integer> cropAcres) {
+    public void setCropAcres (List<Float> cropAcres) {
         this.cropAcres = cropAcres;
     }
     public List<Integer> getBedCount() {
