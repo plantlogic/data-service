@@ -58,9 +58,5 @@ public class CommonDataController{
               });
         return data.orElse(new RestFailure("ID not found."));
     }
-
-
-    
-    
 }
 

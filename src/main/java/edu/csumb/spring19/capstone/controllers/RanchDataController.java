@@ -34,8 +34,8 @@ public class RanchDataController{
     }
 
     @GetMapping("/view/ranches/{ranchManagerName}")
-    public List<RanchData> getRanchDataByRanchManagerName(@PathVariable("ranchManagerName") String ranchManagerName) {
-        return ranchRepository.findByRanchManagerName(ranchManagerName);
+    public RestDTO getRanchDataByRanchManagerName(@PathVariable("ranchManagerName") String ranchManagerName) {
+        return new RestData(ranchRepository.findByRanchManagerName(ranchManagerName));
     }
     
     @PostMapping("/entry/ranches")
@@ -74,37 +74,6 @@ public class RanchDataController{
               });
         return data.orElse(new RestFailure("Ranch ID not found."));
     }
-    
-    @PutMapping("/admin/ranches/{id}")
-    public ResponseEntity<RanchData> updateRanchDataAdmin(@PathVariable("id") String id, @Valid @RequestBody RanchData ranch) {
-        return ranchRepository.findById(id)
-            .map(ranchData -> {
-                ranchData.setFieldID(ranch.getFieldID());
-                ranchData.setRanchName(ranch.getRanchName());
-                ranchData.setRanchManagerName(ranch.getRanchManagerName());
-                ranchData.setIrrigationData(ranch.getIrrigationData());
-                ranchData.setTractorData(ranch.getTractorData());
-                ranchData.setLotNumber(ranch.getLotNumber());
-                ranchData.setTotalAcres(ranch.getTotalAcres());
-                ranchData.setCropYear(ranch.getCropYear());
-                ranchData.setCommodity(ranch.getCommodity());
-                ranchData.setVariety(ranch.getVariety());
-                ranchData.setCropAcres(ranch.getCropAcres());
-                ranchData.setBedCount(ranch.getBedCount());
-                ranchData.setSeedLotNumber(ranch.getSeedLotNumber());
-                ranchData.setBedType(ranch.getBedType());
-                ranchData.setLorsbanRate(ranch.getLorsbanRate());
-                ranchData.setDiaznonRate(ranch.getDiaznonRate());
-                ranchData.setKerbRate(ranch.getKerbRate());
-                ranchData.setDacthalRate(ranch.getDacthalRate());
-                ranchData.setWetDate(ranch.getWetDate());
-                ranchData.setThinDate(ranch.getWetDate());
-                ranchData.setHoeDate(ranch.getHoeDate());
-                ranchData.setHarvestDate(ranch.getHarvestDate());
-                RanchData updatedRanchData = ranchRepository.save(ranchData);
-                return ResponseEntity.ok().body(updatedRanchData);
-            }).orElse(ResponseEntity.notFound().build());
-    }
 
     @DeleteMapping("/edit/ranches/{id}")
     public RestDTO deleteRanchData(@PathVariable("id") String id){
@@ -115,9 +84,5 @@ public class RanchDataController{
               });
         return data.orElse(new RestFailure("Ranch ID not found."));
     }
-
-
-    
-    
 }
 
