@@ -1,7 +1,5 @@
 package edu.csumb.spring19.capstone.controllers;
 
-import javax.validation.Valid;
-
 import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
@@ -10,49 +8,20 @@ import edu.csumb.spring19.capstone.models.RanchData;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-public class RanchDataController{
+@RequestMapping("/edit")
+public class CardEditController {
 
     @Autowired
     private RanchRepository ranchRepository;
 
-    @GetMapping("/view/ranches")
-    public RestDTO getAllRanchData() {
-        Sort sortByRanchName = new Sort(Sort.Direction.ASC, "ranchName");
-        return new RestData<>(ranchRepository.findAll(sortByRanchName));
-    }
-
-    @GetMapping("/view/ranches/ranchName/{ranchName}")
-    public RestDTO getRanchDataByRanchName(@PathVariable("ranchName") String ranchName) {
-        return new RestData<>(ranchRepository.findByRanchName(ranchName));
-    }
-
-    @GetMapping("/view/ranches/ranchManager/{ranchManagerName}")
-    public RestDTO getRanchDataByRanchManagerName(@PathVariable("ranchManagerName") String ranchManagerName) {
-        return new RestData<>(ranchRepository.findByRanchManagerName(ranchManagerName));
-    }
-    
-    @PostMapping("/entry/ranches")
-    public RestDTO createRanchData(@Valid @RequestBody RanchData ranchData) {
-        ranchRepository.save(ranchData);
-        return new RestSuccess();
-    }
-
-    @GetMapping("/entry/ranches/{id}")
-    public RestDTO getRanchData(@PathVariable("id") String id) {
-        Optional<RestDTO> data = ranchRepository.findById(id).map(RestData::new);
-        return data.orElse(new RestFailure("Ranch ID not found."));
-    }
-
-    // TODO: Entry methods for adding tractor/irrigation data to an existing ranch
-
-    @PutMapping("/edit/ranches/{id}")
+    @PutMapping("ranches/{id}")
     public RestDTO updateRanchData(@PathVariable("id") String id, @Valid @RequestBody RanchData ranch) {
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(ranchData -> {
@@ -80,17 +49,17 @@ public class RanchDataController{
                   ranchRepository.save(ranchData);
                   return new RestSuccess();
               });
-        return data.orElse(new RestFailure("Ranch ID not found."));
+        return data.orElse(new RestFailure("Card ID not found."));
     }
 
-    @DeleteMapping("/edit/ranches/{id}")
+    @DeleteMapping("ranches/{id}")
     public RestDTO deleteRanchData(@PathVariable("id") String id){
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(ranch -> {
                   ranchRepository.deleteById(id);
                   return new RestSuccess();
               });
-        return data.orElse(new RestFailure("Ranch ID not found."));
+        return data.orElse(new RestFailure("Card ID not found."));
     }
 }
 

@@ -183,6 +183,10 @@ public class RanchData{
     public void setHarvestDate(Date harvestDate) {
         this.harvestDate = harvestDate;
     }
-    
-    
+    public void addTractorData(TractorData data) {
+        tractorData.add(data);
+    }
+    public void addIrrigationData(IrrigationData data) {
+        irrigationData.add(data);
+    }
 }
