@@ -3,6 +3,7 @@ package edu.csumb.spring19.capstone.repos;
 import edu.csumb.spring19.capstone.models.RanchData;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository

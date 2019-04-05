@@ -1,11 +1,14 @@
 package edu.csumb.spring19.capstone.models;
 
-import java.util.List;
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import java.util.Date;
+import java.util.List;
 
 @Document(collection="ranches")
 @JsonIgnoreProperties(ignoreUnknown = true, value= {"id","fieldID","ranchManagerName"}, allowGetters = true)

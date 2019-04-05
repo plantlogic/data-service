@@ -1,13 +1,11 @@
 package edu.csumb.spring19.capstone.controllers;
 
 import edu.csumb.spring19.capstone.dto.RestDTO;
-import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
 import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.RanchData;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

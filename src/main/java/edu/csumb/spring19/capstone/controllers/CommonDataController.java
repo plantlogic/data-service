@@ -1,7 +1,5 @@
 package edu.csumb.spring19.capstone.controllers;
 
-import javax.validation.Valid;
-
 import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
@@ -9,9 +7,9 @@ import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.CommonData;
 import edu.csumb.spring19.capstone.repos.CommonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
