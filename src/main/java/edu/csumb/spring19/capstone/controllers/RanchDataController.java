@@ -44,6 +44,12 @@ public class RanchDataController{
         return new RestSuccess();
     }
 
+    @GetMapping("/entry/ranches/{id}")
+    public RestDTO getRanchData(@PathVariable("id") String id) {
+        Optional<RestDTO> data = ranchRepository.findById(id).map(RestData::new);
+        return data.orElse(new RestFailure("Ranch ID not found."));
+    }
+
     // TODO: Entry methods for adding tractor/irrigation data to an existing ranch
 
     @PutMapping("/edit/ranches/{id}")
