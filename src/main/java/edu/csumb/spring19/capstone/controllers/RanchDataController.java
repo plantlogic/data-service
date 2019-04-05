@@ -25,17 +25,17 @@ public class RanchDataController{
     @GetMapping("/view/ranches")
     public RestDTO getAllRanchData() {
         Sort sortByRanchName = new Sort(Sort.Direction.ASC, "ranchName");
-        return new RestData(ranchRepository.findAll(sortByRanchName));
+        return new RestData<>(ranchRepository.findAll(sortByRanchName));
     }
 
-    @GetMapping("/view/ranches/{ranchName}")
+    @GetMapping("/view/ranches/ranchName/{ranchName}")
     public RestDTO getRanchDataByRanchName(@PathVariable("ranchName") String ranchName) {
-        return new RestData(ranchRepository.findByRanchName(ranchName));
+        return new RestData<>(ranchRepository.findByRanchName(ranchName));
     }
 
-    @GetMapping("/view/ranches/{ranchManagerName}")
+    @GetMapping("/view/ranches/ranchManager/{ranchManagerName}")
     public RestDTO getRanchDataByRanchManagerName(@PathVariable("ranchManagerName") String ranchManagerName) {
-        return new RestData(ranchRepository.findByRanchManagerName(ranchManagerName));
+        return new RestData<>(ranchRepository.findByRanchManagerName(ranchManagerName));
     }
     
     @PostMapping("/entry/ranches")
@@ -43,6 +43,8 @@ public class RanchDataController{
         ranchRepository.save(ranchData);
         return new RestSuccess();
     }
+
+    // TODO: Entry methods for adding tractor/irrigation data to an existing ranch
 
     @PutMapping("/edit/ranches/{id}")
     public RestDTO updateRanchData(@PathVariable("id") String id, @Valid @RequestBody RanchData ranch) {
