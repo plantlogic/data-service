@@ -18,7 +18,6 @@ public class RanchData{
 
     @NotEmpty
     private String ranchName;
-    @NotEmpty
     private Integer fieldID;
     private String ranchManagerName;
     private String lotNumber;
