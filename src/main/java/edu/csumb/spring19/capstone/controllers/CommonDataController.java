@@ -23,7 +23,7 @@ public class CommonDataController{
 
     @GetMapping("/view/common")
     public RestDTO getAllCommonData() {
-        return new RestData(commonRepository.findAll());
+        return new RestData<>(commonRepository.findAll());
     }
 
     @PostMapping("/admin/common")
