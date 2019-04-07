@@ -19,7 +19,7 @@ public class CommonDataController{
     @Autowired
     private CommonRepository commonRepository;
 
-    @GetMapping("/view/common")
+    @GetMapping("/admin/common")
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());
     }
@@ -30,7 +30,7 @@ public class CommonDataController{
         return new RestSuccess();
     }
 
-    @PutMapping({"/entry/common/{id}"})
+    @PutMapping({"/admin/common/{id}"})
     public RestDTO updateCommonData(@PathVariable("id") String id, @Valid @RequestBody CommonData common) {
         Optional<RestDTO> data = commonRepository.findById(id)
               .map(commonData -> {

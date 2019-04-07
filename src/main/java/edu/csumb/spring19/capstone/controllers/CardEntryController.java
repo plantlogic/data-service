@@ -32,7 +32,7 @@ public class CardEntryController {
     @GetMapping("/ranches")
     public RestDTO getAllRanchData() {
         Sort sortByRanchName = new Sort(Sort.Direction.ASC, "ranchName");
-        return new RestData<>(ranchRepository.findAll(sortByRanchName));
+        return new RestData<>(ranchRepository.findAllByHarvestDateIsNull(sortByRanchName));
     }
 
     @GetMapping("/ranches/{id}")
