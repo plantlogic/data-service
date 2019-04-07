@@ -42,10 +42,10 @@ public class RanchData{
     private Float kerbRate;
     private Float dacthalRate;
 
-    private Date wetDate = new Date();
-    private Date thinDate = new Date();
-    private Date hoeDate = new Date();
-    private Date harvestDate = new Date();
+    private Date wetDate;
+    private Date thinDate;
+    private Date hoeDate;
+    private Date harvestDate;
     
     public String getId() {
         return id;
