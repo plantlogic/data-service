@@ -60,5 +60,16 @@ public class CardEntryController {
             return new RestSuccess();
         } else return new RestFailure("Card ID not found.");
     }
+
+    @PutMapping("/ranches/{id}/close")
+    public RestDTO closeCard(@PathVariable("id") String id, @RequestBody RanchData ranch) {
+        Optional<RestDTO> data = ranchRepository.findById(id)
+              .map(ranchData -> {
+                  ranchData.setHarvestDate(ranch.getHarvestDate());
+                  ranchRepository.save(ranchData);
+                  return new RestSuccess();
+              });
+        return data.orElse(new RestFailure("Card ID not found."));
+    }
 }
 
