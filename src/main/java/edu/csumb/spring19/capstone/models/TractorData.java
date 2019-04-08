@@ -11,6 +11,7 @@ public class TractorData{
 
     private Date workDate = new Date();
     private String workDone;
+    private String operator;
     private String fertilizer;
     private Float gallons;
 
@@ -25,6 +26,12 @@ public class TractorData{
     }
     public void setWorkDone(String workDone) {
         this.workDone = workDone;
+    }
+    public String getOperator() {
+        return operator;
+    }
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
     public String getFertilizer(){
         return fertilizer;
