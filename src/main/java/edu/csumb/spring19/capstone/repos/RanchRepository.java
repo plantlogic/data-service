@@ -11,6 +11,7 @@ import java.util.List;
 public interface RanchRepository extends MongoRepository<RanchData, String>{
     List<RanchData> findByRanchName(String ranchName);
     List<RanchData> findByRanchManagerName(String ranchManagerName);
-    Iterable<RanchData> findAllByIsClosedEquals(Boolean isClosed, Sort sort);
+    Iterable<RanchData> findAllByIsClosedTrue(Sort sort);
+    Iterable<RanchData> findAllByIsClosedFalse(Sort sort);
 }
 

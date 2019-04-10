@@ -21,11 +21,13 @@ public class CardViewController {
     @GetMapping("/ranches")
     public RestDTO getAllRanchData(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
-        Sort sortByRanchName = new Sort(Sort.Direction.ASC, "ranchName");
+        Sort sortByRanchName = new Sort(Sort.Direction.ASC, "lastUpdated");
         if (openCards && closedCards) {
             return new RestData<>(ranchRepository.findAll(sortByRanchName));
-        } else if (openCards || closedCards) {
-            return new RestData<>(ranchRepository.findAllByIsClosedEquals(closedCards, sortByRanchName));
+        } else if (openCards) {
+            return new RestData<>(ranchRepository.findAllByIsClosedFalse(sortByRanchName));
+        } else if (closedCards) {
+            return new RestData<>(ranchRepository.findAllByIsClosedTrue(sortByRanchName));
         } else {
             return new RestFailure("You requested no cards.");
         }
