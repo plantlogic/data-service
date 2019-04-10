@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Document(collection="ranches")
-@JsonIgnoreProperties(ignoreUnknown = true, value= {"id","fieldID","ranchManagerName"}, allowGetters = true)
+@JsonIgnoreProperties(ignoreUnknown = true, value= {"id"}, allowGetters = true)
 public class RanchData{
     @Id
     private String id;
