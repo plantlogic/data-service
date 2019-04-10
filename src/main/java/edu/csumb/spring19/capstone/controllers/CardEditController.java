@@ -42,7 +42,7 @@ public class CardEditController {
                   ranchData.setKerbRate(ranch.getKerbRate());
                   ranchData.setDacthalRate(ranch.getDacthalRate());
                   ranchData.setWetDate(ranch.getWetDate());
-                  ranchData.setThinDate(ranch.getWetDate());
+                  ranchData.setThinDate(ranch.getThinDate());
                   ranchData.setHoeDate(ranch.getHoeDate());
                   ranchData.setHarvestDate(ranch.getHarvestDate());
                   ranchRepository.save(ranchData);
