@@ -31,7 +31,7 @@ public class CardEntryController {
 
     @GetMapping("/ranches")
     public RestDTO getAllRanchData() {
-        Sort sortByRanchName = new Sort(Sort.Direction.ASC, "lastUpdated");
+        Sort sortByRanchName = new Sort(Sort.Direction.DESC, "lastUpdated");
         return new RestData<>(ranchRepository.findAllByIsClosedFalse(sortByRanchName));
     }
 
