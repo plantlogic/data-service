@@ -25,7 +25,7 @@ public class CardViewController {
         if (openCards && closedCards) {
             return new RestData<>(ranchRepository.findAll(sortByRanchName));
         } else if (openCards || closedCards) {
-            return new RestData<>(ranchRepository.findAllByIsClosedMatches(closedCards, sortByRanchName));
+            return new RestData<>(ranchRepository.findAllByIsClosedEquals(closedCards, sortByRanchName));
         } else {
             return new RestFailure("You requested no cards.");
         }
