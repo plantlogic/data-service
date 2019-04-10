@@ -32,7 +32,7 @@ public class CardEntryController {
     @GetMapping("/ranches")
     public RestDTO getAllRanchData() {
         Sort sortByRanchName = new Sort(Sort.Direction.ASC, "ranchName");
-        return new RestData<>(ranchRepository.findAllByHarvestDateIsNull(sortByRanchName));
+        return new RestData<>(ranchRepository.findAllByIsClosed(false, sortByRanchName));
     }
 
     @GetMapping("/ranches/{id}")
@@ -46,6 +46,7 @@ public class CardEntryController {
         Optional<RanchData> card = ranchRepository.findById(id);
         if (card.isPresent()) {
             card.get().addTractorData(data);
+            card.get().setLastUpdated();
             ranchRepository.save(card.get());
             return new RestSuccess();
         } else return new RestFailure("Card ID not found.");
@@ -56,6 +57,7 @@ public class CardEntryController {
         Optional<RanchData> card = ranchRepository.findById(id);
         if (card.isPresent()) {
             card.get().addIrrigationData(data);
+            card.get().setLastUpdated();
             ranchRepository.save(card.get());
             return new RestSuccess();
         } else return new RestFailure("Card ID not found.");
@@ -66,6 +68,8 @@ public class CardEntryController {
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(ranchData -> {
                   ranchData.setHarvestDate(ranch.getHarvestDate());
+                  ranchData.setIsClosed(true);
+                  ranchData.setLastUpdated();
                   ranchRepository.save(ranchData);
                   return new RestSuccess();
               });

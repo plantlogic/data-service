@@ -23,6 +23,8 @@ public class CardEditController {
     public RestDTO updateRanchData(@PathVariable("id") String id, @Valid @RequestBody RanchData ranch) {
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(ranchData -> {
+                  ranchData.setLastUpdated();
+                  ranchData.setIsClosed(ranch.getIsClosed());
                   ranchData.setRanchName(ranch.getRanchName());
                   ranchData.setRanchManagerName(ranch.getRanchManagerName());
                   ranchData.setIrrigationData(ranch.getIrrigationData());
