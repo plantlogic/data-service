@@ -15,6 +15,8 @@ import java.util.List;
 public class RanchData{
     @Id
     private String id;
+    private Boolean isClosed = false;
+    private Date lastUpdated = new Date();
     
     private List<IrrigationData> irrigationData;
     private List<TractorData> tractorData;
@@ -52,6 +54,18 @@ public class RanchData{
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public Boolean getIsClosed() {
+        return isClosed;
+    }
+    public void setIsClosed(Boolean isClosed) {
+        this.isClosed = isClosed;
+    }
+    public Date getLastUpdated() {
+        return this.lastUpdated;
+    }
+    public void setLastUpdated() {
+        this.lastUpdated = new Date();
     }
     public List<IrrigationData> getIrrigationData() {
         return irrigationData;
