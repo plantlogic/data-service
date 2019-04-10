@@ -24,7 +24,6 @@ public class CardEditController {
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(ranchData -> {
                   ranchData.setLastUpdated();
-                  ranchData.setIsClosed(ranch.getIsClosed());
                   ranchData.setRanchName(ranch.getRanchName());
                   ranchData.setRanchManagerName(ranch.getRanchManagerName());
                   ranchData.setIrrigationData(ranch.getIrrigationData());
@@ -46,6 +45,18 @@ public class CardEditController {
                   ranchData.setThinDate(ranch.getWetDate());
                   ranchData.setHoeDate(ranch.getHoeDate());
                   ranchData.setHarvestDate(ranch.getHarvestDate());
+                  ranchRepository.save(ranchData);
+                  return new RestSuccess();
+              });
+        return data.orElse(new RestFailure("Card ID not found."));
+    }
+
+    @PutMapping("ranches/{id}/state")
+    public RestDTO setRanchDataState(@PathVariable("id") String id, @RequestParam Boolean closed) {
+        Optional<RestDTO> data = ranchRepository.findById(id)
+              .map(ranchData -> {
+                  ranchData.setLastUpdated();
+                  ranchData.setIsClosed(closed);
                   ranchRepository.save(ranchData);
                   return new RestSuccess();
               });
