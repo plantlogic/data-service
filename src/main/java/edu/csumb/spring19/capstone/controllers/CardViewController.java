@@ -48,5 +48,10 @@ public class CardViewController {
     public RestDTO getRanchDataByRanchManagerName(@PathVariable("ranchManagerName") String ranchManagerName) {
         return new RestData<>(ranchRepository.findByRanchManagerName(ranchManagerName));
     }
+
+    @GetMapping("ranches/fieldID/{fieldID}")
+    public RestDTO getRanchDataByFieldID(@PathVariable("fieldID") Integer fieldID){
+        return new RestData<>(ranchRepository.findByFieldID(fieldID));
+    }
 }
 
