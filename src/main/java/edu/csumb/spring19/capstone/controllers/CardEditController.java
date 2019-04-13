@@ -25,22 +25,16 @@ public class CardEditController {
               .map(ranchData -> {
                   ranchData.setLastUpdated();
                   ranchData.setRanchName(ranch.getRanchName());
+                  ranchData.setFieldID(ranch.getFieldID());
                   ranchData.setRanchManagerName(ranch.getRanchManagerName());
                   ranchData.setIrrigationData(ranch.getIrrigationData());
                   ranchData.setTractorData(ranch.getTractorData());
+                  ranchData.setInitialData(ranch.getInitialData());
+                  ranchData.setPreplantData(ranch.getPreplantData());
+                  ranchData.setPlantingData(ranch.getPlantingData());
                   ranchData.setLotNumber(ranch.getLotNumber());
-                  ranchData.setTotalAcres(ranch.getTotalAcres());
+                  ranchData.setShipperID(ranch.getShipperID());
                   ranchData.setCropYear(ranch.getCropYear());
-                  ranchData.setCommodity(ranch.getCommodity());
-                  ranchData.setVariety(ranch.getVariety());
-                  ranchData.setCropAcres(ranch.getCropAcres());
-                  ranchData.setBedCount(ranch.getBedCount());
-                  ranchData.setSeedLotNumber(ranch.getSeedLotNumber());
-                  ranchData.setBedType(ranch.getBedType());
-                  ranchData.setLorsbanRate(ranch.getLorsbanRate());
-                  ranchData.setDiaznonRate(ranch.getDiaznonRate());
-                  ranchData.setKerbRate(ranch.getKerbRate());
-                  ranchData.setDacthalRate(ranch.getDacthalRate());
                   ranchData.setWetDate(ranch.getWetDate());
                   ranchData.setThinDate(ranch.getThinDate());
                   ranchData.setHoeDate(ranch.getHoeDate());
