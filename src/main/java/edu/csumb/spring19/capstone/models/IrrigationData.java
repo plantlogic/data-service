@@ -12,6 +12,7 @@ public class IrrigationData{
     private Date workDate = new Date();
     private String method;
     private String fertilizer;
+    private String chemical;
     private Float gallons;
 
     public Date getWorkDate() {
@@ -31,6 +32,12 @@ public class IrrigationData{
     }
     public void setFertilizer(String fertilizer){
         this.fertilizer = fertilizer;
+    }
+    public String getChemical(){
+        return chemical;
+    }
+    public void setChemical(String chemical){
+        this.chemical=chemical;
     }
     public Float getGallons() {
         return gallons;
