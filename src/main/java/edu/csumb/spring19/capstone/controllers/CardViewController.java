@@ -21,7 +21,7 @@ public class CardViewController {
     @GetMapping("/ranches")
     public RestDTO getAllRanchData(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
-        Sort sortByRanchName = new Sort(Sort.Direction.DESC, "lastUpdated");
+        Sort sortByRanchName = Sort.by(Sort.Order.asc("fieldID"), Sort.Order.desc("lastUpdated"));
         if (openCards && closedCards) {
             return new RestData<>(ranchRepository.findAll(sortByRanchName));
         } else if (openCards) {
