@@ -13,6 +13,7 @@ public class TractorData{
     private String workDone;
     private String operator;
     private String fertilizer;
+    private String chemical;
     private Float gallons;
 
     public Date getWorkDate() {
@@ -38,6 +39,12 @@ public class TractorData{
     }
     public void setFertilizer(String fertilizer){
         this.fertilizer = fertilizer;
+    }
+    public String getChemical(){
+        return chemical;
+    }
+    public void setChemical(String chemical){
+        this.chemical=chemical;
     }
     public Float getGallons() {
         return gallons;

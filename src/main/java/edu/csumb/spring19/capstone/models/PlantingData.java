@@ -10,11 +10,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class PlantingData{
 
     private String fertilizer;
+    private String chemical;
     private String amount;
     private Date date;
 
     public String getFertilizer() {
         return fertilizer;
+    }
+    public void setFertilizer(String fertilizer) {
+        this.fertilizer = fertilizer;
+    }
+    public String getChemical(){
+        return chemical;
+    }
+    public void setChemical(String chemical){
+        this.chemical=chemical;
     }
     public Date getDate() {
         return date;
@@ -28,8 +38,6 @@ public class PlantingData{
     public void setAmount(String amount) {
         this.amount = amount;
     }
-    public void setFertilizer(String fertilizer) {
-        this.fertilizer = fertilizer;
-    }
+    
     
 }
