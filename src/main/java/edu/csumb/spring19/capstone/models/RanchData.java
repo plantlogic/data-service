@@ -19,7 +19,7 @@ public class RanchData{
     private List<IrrigationData> irrigationData;
     private List<TractorData> tractorData;
     private List<InitialData> initialData;
-    private List<PreplantData> preplantData;
+    private List<PlantingData> preplantData;
     private List<PlantingData> plantingData;
 
     @NotEmpty
@@ -78,10 +78,10 @@ public class RanchData{
     public void setInitialData(List<InitialData> initialData) {
         this.initialData = initialData;
     }
-    public List<PreplantData> getPreplantData() {
+    public List<PlantingData> getPreplantData() {
         return preplantData;
     }
-    public void setPreplantData(List<PreplantData> preplantData) {
+    public void setPreplantData(List<PlantingData> preplantData) {
         this.preplantData = preplantData;
     }
     public List<PlantingData> getPlantingData() {
