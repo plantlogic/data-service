@@ -1,6 +1,6 @@
 package edu.csumb.spring19.capstone.repos;
 
-import edu.csumb.spring19.capstone.models.RanchData;
+import edu.csumb.spring19.capstone.models.card.Card;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Sort;
@@ -8,11 +8,11 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 @Repository
-public interface RanchRepository extends MongoRepository<RanchData, String>{
-    List<RanchData> findByRanchName(String ranchName);
-    List<RanchData> findByRanchManagerName(String ranchManagerName);
-    Iterable<RanchData> findAllByIsClosedTrue(Sort sort);
-    Iterable<RanchData> findAllByIsClosedFalse(Sort sort);
-    List<RanchData> findByFieldID(Integer fieldID);
+public interface RanchRepository extends MongoRepository<Card, String>{
+    List<Card> findByRanchName(String ranchName);
+    List<Card> findByRanchManagerName(String ranchManagerName);
+    Iterable<Card> findAllByIsClosedTrue(Sort sort);
+    Iterable<Card> findAllByIsClosedFalse(Sort sort);
+    List<Card> findByFieldID(Integer fieldID);
 }
 

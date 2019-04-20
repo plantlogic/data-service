@@ -1,12 +1,11 @@
-package edu.csumb.spring19.capstone.models;
+package edu.csumb.spring19.capstone.models.card;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="initial")
+@Document(collection="commodities")
 @JsonIgnoreProperties(ignoreUnknown = true, allowGetters = true)
-public class InitialData{
-
+public class Commodities {
     private String commodity;
     private Float cropAcres;
     private Integer bedType;
@@ -50,5 +49,4 @@ public class InitialData{
     public void setVariety(String variety) {
         this.variety = variety;
     }
-
 }

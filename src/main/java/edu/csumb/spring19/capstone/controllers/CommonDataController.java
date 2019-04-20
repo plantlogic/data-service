@@ -4,7 +4,7 @@ import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
 import edu.csumb.spring19.capstone.dto.RestSuccess;
-import edu.csumb.spring19.capstone.models.CommonData;
+import edu.csumb.spring19.capstone.models.common.CommonData;
 import edu.csumb.spring19.capstone.repos.CommonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

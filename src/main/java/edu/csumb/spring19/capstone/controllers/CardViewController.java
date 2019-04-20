@@ -36,7 +36,7 @@ public class CardViewController {
     @GetMapping("/ranches/{id}")
     public RestDTO getRanchData(@PathVariable("id") String id) {
         Optional<RestDTO> data = ranchRepository.findById(id).map(RestData::new);
-        return data.orElse(new RestFailure("Card ID not found."));
+        return data.orElse(new RestFailure("card ID not found."));
     }
 
     @GetMapping("/ranches/ranchName/{ranchName}")

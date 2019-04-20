@@ -4,14 +4,16 @@ import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
 import edu.csumb.spring19.capstone.dto.RestSuccess;
-import edu.csumb.spring19.capstone.models.IrrigationData;
-import edu.csumb.spring19.capstone.models.RanchData;
-import edu.csumb.spring19.capstone.models.TractorData;
+import edu.csumb.spring19.capstone.models.card.Chemicals;
+import edu.csumb.spring19.capstone.models.card.Irrigation;
+import edu.csumb.spring19.capstone.models.card.Card;
+import edu.csumb.spring19.capstone.models.card.Tractor;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.LimitExceededException;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -24,8 +26,8 @@ public class CardEntryController {
     private RanchRepository ranchRepository;
     
     @PostMapping("/ranches")
-    public RestDTO createRanchData(@Valid @RequestBody RanchData ranchData) {
-        ranchRepository.save(ranchData);
+    public RestDTO createRanchData(@Valid @RequestBody Card card) {
+        ranchRepository.save(card);
         return new RestSuccess();
     }
 
@@ -38,42 +40,68 @@ public class CardEntryController {
     @GetMapping("/ranches/{id}")
     public RestDTO getRanchData(@PathVariable("id") String id) {
         Optional<RestDTO> data = ranchRepository.findById(id).map(RestData::new);
-        return data.orElse(new RestFailure("Card ID not found."));
+        return data.orElse(new RestFailure("card ID not found."));
     }
 
     @PostMapping("/ranches/{id}/tractor")
-    public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody TractorData data) {
-        Optional<RanchData> card = ranchRepository.findById(id);
+    public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody Tractor data) {
+        Optional<Card> card = ranchRepository.findById(id);
         if (card.isPresent()) {
-            card.get().addTractorData(data);
+            try {
+                card.get().addTractor(data);
+            } catch (LimitExceededException e) {
+                return new RestFailure(e.getMessage());
+            }
+
             card.get().setLastUpdated();
             ranchRepository.save(card.get());
             return new RestSuccess();
-        } else return new RestFailure("Card ID not found.");
+        } else return new RestFailure("card ID not found.");
     }
 
     @PostMapping("/ranches/{id}/irrigation")
-    public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody IrrigationData data) {
-        Optional<RanchData> card = ranchRepository.findById(id);
+    public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody Irrigation data) {
+        Optional<Card> card = ranchRepository.findById(id);
         if (card.isPresent()) {
-            card.get().addIrrigationData(data);
+            try {
+                card.get().addIrrigation(data);
+            } catch (LimitExceededException e) {
+                return new RestFailure(e.getMessage());
+            }
+
             card.get().setLastUpdated();
             ranchRepository.save(card.get());
             return new RestSuccess();
-        } else return new RestFailure("Card ID not found.");
+        } else return new RestFailure("card ID not found.");
+    }
+
+    @PostMapping("/ranches/{id}/chemical")
+    public RestDTO addChemicalData(@PathVariable("id") String id, @RequestBody Chemicals data) {
+        Optional<Card> card = ranchRepository.findById(id);
+        if (card.isPresent()) {
+            try {
+                card.get().addPostChemicals(data);
+            } catch (LimitExceededException e) {
+                return new RestFailure(e.getMessage());
+            }
+
+            card.get().setLastUpdated();
+            ranchRepository.save(card.get());
+            return new RestSuccess();
+        } else return new RestFailure("card ID not found.");
     }
 
     @PutMapping("/ranches/{id}/close")
-    public RestDTO closeCard(@PathVariable("id") String id, @RequestBody RanchData ranch) {
+    public RestDTO closeCard(@PathVariable("id") String id, @RequestBody Card ranch) {
         Optional<RestDTO> data = ranchRepository.findById(id)
-              .map(ranchData -> {
-                  ranchData.setHarvestDate(ranch.getHarvestDate());
-                  ranchData.setIsClosed(true);
-                  ranchData.setLastUpdated();
-                  ranchRepository.save(ranchData);
+              .map(card -> {
+                  card.setHarvestDate(ranch.getHarvestDate());
+                  card.setClosed(true);
+                  card.setLastUpdated();
+                  ranchRepository.save(card);
                   return new RestSuccess();
               });
-        return data.orElse(new RestFailure("Card ID not found."));
+        return data.orElse(new RestFailure("card ID not found."));
     }
 }
 
