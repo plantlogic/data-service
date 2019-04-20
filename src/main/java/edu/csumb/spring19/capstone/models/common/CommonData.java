@@ -1,4 +1,4 @@
-package edu.csumb.spring19.capstone.models;
+package edu.csumb.spring19.capstone.models.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
