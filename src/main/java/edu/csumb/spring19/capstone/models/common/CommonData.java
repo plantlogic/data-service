@@ -4,14 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="common")
 @JsonIgnoreProperties(ignoreUnknown = true, allowGetters = true)
-public class CommonData {
+public class CommonData<E> {
     @Id
     private String key;
-    private List<String> values;
+    private List<E> values = new ArrayList<>();
+
+    public CommonData(String key) {
+        this.key = key;
+    }
 
     public String getKey() {
         return key;
@@ -21,11 +26,11 @@ public class CommonData {
         this.key = key;
     }
 
-    public List<String> getValues() {
+    public List<E> getValues() {
         return values;
     }
 
-    public void setValues(List<String> values) {
+    public void setValues(List<E> values) {
         this.values = values;
     }
 }

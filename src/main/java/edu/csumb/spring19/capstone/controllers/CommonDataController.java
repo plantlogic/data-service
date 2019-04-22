@@ -26,33 +26,16 @@ public class CommonDataController{
         else return new RestFailure("Key not found.");
     }
 
-    @GetMapping("/admin/common")
+    @GetMapping("/common")
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());
     }
 
-    @PostMapping("/admin/common")
-    public RestDTO createCommonData(@Valid @RequestBody CommonData commonData) {
-        commonRepository.save(commonData);
-        return new RestSuccess();
-    }
-
-    @PutMapping({"/admin/common/{id}"})
-    public RestDTO updateCommonData(@PathVariable("id") String id, @Valid @RequestBody CommonData common) {
-        Optional<RestDTO> data = commonRepository.findById(id)
+    @PutMapping({"/admin/common"})
+    public RestDTO updateCommonData(@RequestBody CommonData common) {
+        Optional<RestDTO> data = commonRepository.findById(common.getKey())
               .map(commonData -> {
-                  if (!id.equals(common.getKey())) commonRepository.deleteById(id);
                   commonRepository.save(common);
-                  return new RestSuccess();
-              });
-        return data.orElse(new RestFailure("Key not found."));
-    }
-
-    @DeleteMapping("/admin/common/{id}")
-    public RestDTO deleteCommonData(@PathVariable("id") String id){
-        Optional<RestDTO> data = commonRepository.findById(id)
-              .map(common -> {
-                  commonRepository.deleteById(id);
                   return new RestSuccess();
               });
         return data.orElse(new RestFailure("Key not found."));
