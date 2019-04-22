@@ -12,10 +12,11 @@ import java.util.List;
 public class CommonData<E> {
     @Id
     private String key;
-    private List<E> values = new ArrayList<>();
+    private E values;
 
-    public CommonData(String key) {
+    public CommonData(String key, E values) {
         this.key = key;
+        this.values = values;
     }
 
     public String getKey() {
@@ -26,11 +27,11 @@ public class CommonData<E> {
         this.key = key;
     }
 
-    public List<E> getValues() {
+    public E getValues() {
         return values;
     }
 
-    public void setValues(List<E> values) {
+    public void setValues(E values) {
         this.values = values;
     }
 }
