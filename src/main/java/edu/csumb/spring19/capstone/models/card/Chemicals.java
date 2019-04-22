@@ -1,8 +1,9 @@
 package edu.csumb.spring19.capstone.models.card;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
 
 @Document(collection="chemicals")
 @JsonIgnoreProperties(allowGetters = true)

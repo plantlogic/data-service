@@ -19,6 +19,13 @@ public class CommonDataController{
     @Autowired
     private CommonRepository commonRepository;
 
+    @GetMapping("/common/{id}")
+    public RestDTO getCommonData(@PathVariable("id") String id) {
+        Optional<CommonData> data = commonRepository.findById(id);
+        if (data.isPresent()) return new RestData<>(data);
+        else return new RestFailure("Key not found.");
+    }
+
     @GetMapping("/admin/common")
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());
@@ -34,17 +41,11 @@ public class CommonDataController{
     public RestDTO updateCommonData(@PathVariable("id") String id, @Valid @RequestBody CommonData common) {
         Optional<RestDTO> data = commonRepository.findById(id)
               .map(commonData -> {
-                  commonData.setRanches(common.getRanches());
-                  commonData.setRanchManagers(common.getRanchManagers());
-                  commonData.setPostPlantFertilizers(common.getPostPlantFertilizers());
-                  commonData.setPrePlantFertilizers(common.getPrePlantFertilizers());
-                  commonData.setOrganicFertilizers(common.getOrganicFertilizers());
-                  commonData.setInsecticides(common.getInsecticides());
-                  commonData.setHerbicides(common.getHerbicides());
-                  commonRepository.save(commonData);
+                  if (!id.equals(common.getKey())) commonRepository.deleteById(id);
+                  commonRepository.save(common);
                   return new RestSuccess();
               });
-        return data.orElse(new RestFailure("ID not found."));
+        return data.orElse(new RestFailure("Key not found."));
     }
 
     @DeleteMapping("/admin/common/{id}")
@@ -54,7 +55,7 @@ public class CommonDataController{
                   commonRepository.deleteById(id);
                   return new RestSuccess();
               });
-        return data.orElse(new RestFailure("ID not found."));
+        return data.orElse(new RestFailure("Key not found."));
     }
 }
 
