@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="common")
@@ -11,7 +12,7 @@ import java.util.List;
 public class CommonData<E> {
     @Id
     private String key;
-    private List<E> values;
+    private List<E> values = new ArrayList<>();
 
     public CommonData(String key) {
         this.key = key;

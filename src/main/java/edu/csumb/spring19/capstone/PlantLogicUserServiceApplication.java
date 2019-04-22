@@ -17,7 +17,7 @@ public class PlantLogicUserServiceApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... params) throws Exception {
+	public void run(String... params) {
 		if (commonRepository.count() < 1) {
 			commonRepository.saveAll(
 				(new CommonInit())

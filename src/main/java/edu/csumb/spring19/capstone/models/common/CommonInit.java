@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommonInit {
-    private ArrayList<CommonData> common;
+    private ArrayList<CommonData> common = new ArrayList<>();
 
     public List<CommonData> build() {
         return common;

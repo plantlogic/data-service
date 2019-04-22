@@ -26,7 +26,7 @@ public class CommonDataController{
         else return new RestFailure("Key not found.");
     }
 
-    @GetMapping("/admin/common")
+    @GetMapping("/common")
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());
     }
