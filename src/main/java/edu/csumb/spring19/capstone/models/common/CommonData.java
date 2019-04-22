@@ -8,10 +8,14 @@ import java.util.List;
 
 @Document(collection="common")
 @JsonIgnoreProperties(ignoreUnknown = true, allowGetters = true)
-public class CommonData {
+public class CommonData<E> {
     @Id
     private String key;
-    private List<String> values;
+    private List<E> values;
+
+    public CommonData(String key) {
+        this.key = key;
+    }
 
     public String getKey() {
         return key;
@@ -21,11 +25,11 @@ public class CommonData {
         this.key = key;
     }
 
-    public List<String> getValues() {
+    public List<E> getValues() {
         return values;
     }
 
-    public void setValues(List<String> values) {
+    public void setValues(List<E> values) {
         this.values = values;
     }
 }
