@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommonInitService {
     @Autowired
-    private static CommonRepository commonRepository;
+    private CommonRepository commonRepository;
 
-    public static void initDatabase() {
+    public void initDatabase() {
         if (!commonRepository.existsById("ranches")) {
             commonRepository.saveAll((new CommonInitBuilder()).ranches().build());
         }

@@ -5,3 +5,9 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/plantlogic/data-service.svg?style=flat)](https://hub.docker.com/r/plantlogic/data-service) 
 [![Demo](https://img.shields.io/badge/demo-live-success.svg)](https://demo.plantlogic.org)
 # 🌱 PlantLogic | Data Service
+
+## Docker Environment Variables
+### App Configuration
+* **ALLOW_COMMON_RESET:** Default is `false`. Deletes all 'common' data, but not ranch data.
+* **SERVER_SERVLET_CONTEXT_PATH**: The path that the service listens to. If served from `example.com/api/user/`, this should be 
+`/api/user` (which is the default).
