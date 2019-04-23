@@ -35,12 +35,12 @@ public class CommonInit {
     }
 
     public CommonInit bedTypes() {
-        common.add(new CommonData<List<String>>("bedTypes", new ArrayList<>()));
+        common.add(new CommonData<List<Integer>>("bedTypes", new ArrayList<>()));
         return this;
     }
 
     public CommonInit bedCounts() {
-        common.add(new CommonData<List<String>>("bedCounts", new ArrayList<>()));
+        common.add(new CommonData<List<Integer>>("bedCounts", new ArrayList<>()));
         return this;
     }
 
