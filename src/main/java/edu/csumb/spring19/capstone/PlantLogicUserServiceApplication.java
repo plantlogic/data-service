@@ -18,18 +18,32 @@ public class PlantLogicUserServiceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... params) {
-		if (commonRepository.count() < 1) {
-			commonRepository.saveAll(
-				(new CommonInit())
-					.ranches()
-					.fertilizers()
-					.chemicals()
-					.tractorOperators()
-					.bedTypes()
-					.bedCounts()
-					.commodities()
-				.build()
-			);
+		if (!commonRepository.existsById("ranches")) {
+			commonRepository.saveAll((new CommonInit()).ranches().build());
+		}
+
+		if (!commonRepository.existsById("fertilizers")) {
+			commonRepository.saveAll((new CommonInit()).fertilizers().build());
+		}
+
+		if (!commonRepository.existsById("chemicals")) {
+			commonRepository.saveAll((new CommonInit()).chemicals().build());
+		}
+
+		if (!commonRepository.existsById("tractorOperators")) {
+			commonRepository.saveAll((new CommonInit()).tractorOperators().build());
+		}
+
+		if (!commonRepository.existsById("bedTypes")) {
+			commonRepository.saveAll((new CommonInit()).bedTypes().build());
+		}
+
+		if (!commonRepository.existsById("bedCounts")) {
+			commonRepository.saveAll((new CommonInit()).bedCounts().build());
+		}
+
+		if (!commonRepository.existsById("commodities")) {
+			commonRepository.saveAll((new CommonInit()).commodities().build());
 		}
 	}
 }
