@@ -5,11 +5,11 @@ import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
 import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.common.CommonData;
+import edu.csumb.spring19.capstone.models.common.CommonInitService;
 import edu.csumb.spring19.capstone.repos.CommonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -39,6 +39,13 @@ public class CommonDataController{
                   return new RestSuccess();
               });
         return data.orElse(new RestFailure("Key not found."));
+    }
+
+    @DeleteMapping({"/admin/reset"})
+    public RestDTO resetCommonData() {
+        commonRepository.deleteAll();
+        CommonInitService.initDatabase();
+        return new RestSuccess();
     }
 }
 
