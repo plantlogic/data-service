@@ -1,51 +1,49 @@
 package edu.csumb.spring19.capstone.models.common;
 
-import org.springframework.data.util.Pair;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class CommonInit {
+public class CommonInitBuilder {
     private ArrayList<CommonData> common = new ArrayList<>();
 
     public List<CommonData> build() {
         return common;
     }
 
-    public CommonInit ranches() {
+    public CommonInitBuilder ranches() {
         common.add(new CommonData<List<String>>("ranches", new ArrayList<>()));
         return this;
     }
 
-    public CommonInit fertilizers() {
+    public CommonInitBuilder fertilizers() {
         common.add(new CommonData<List<String>>("fertilizers", new ArrayList<>()));
         return this;
     }
 
-    public CommonInit chemicals() {
+    public CommonInitBuilder chemicals() {
         common.add(new CommonData<List<String>>("chemicals", new ArrayList<>()));
         return this;
     }
 
-    public CommonInit tractorOperators() {
+    public CommonInitBuilder tractorOperators() {
         common.add(new CommonData<List<String>>("tractorOperators", new ArrayList<>()));
         return this;
     }
 
-    public CommonInit bedTypes() {
-        common.add(new CommonData<List<String>>("bedTypes", new ArrayList<>()));
+    public CommonInitBuilder bedTypes() {
+        common.add(new CommonData<List<Integer>>("bedTypes", new ArrayList<>()));
         return this;
     }
 
-    public CommonInit bedCounts() {
-        common.add(new CommonData<List<String>>("bedCounts", new ArrayList<>()));
+    public CommonInitBuilder bedCounts() {
+        common.add(new CommonData<List<Integer>>("bedCounts", new ArrayList<>()));
         return this;
     }
 
     // Contains both commodities and the sublist of varieties
-    public CommonInit commodities() {
+    public CommonInitBuilder commodities() {
         CommonData<HashMap<String, List<String>>> list = new CommonData<>("commodities", new HashMap<>());
         list.getValues().put("Lettuce", Arrays.asList("Variety 1", "Variety 2"));
         common.add(list);

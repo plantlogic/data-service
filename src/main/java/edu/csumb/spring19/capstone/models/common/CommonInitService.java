@@ -1,0 +1,41 @@
+package edu.csumb.spring19.capstone.models.common;
+
+import edu.csumb.spring19.capstone.repos.CommonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CommonInitService {
+    @Autowired
+    private CommonRepository commonRepository;
+
+    public void initDatabase() {
+        if (!commonRepository.existsById("ranches")) {
+            commonRepository.saveAll((new CommonInitBuilder()).ranches().build());
+        }
+
+        if (!commonRepository.existsById("fertilizers")) {
+            commonRepository.saveAll((new CommonInitBuilder()).fertilizers().build());
+        }
+
+        if (!commonRepository.existsById("chemicals")) {
+            commonRepository.saveAll((new CommonInitBuilder()).chemicals().build());
+        }
+
+        if (!commonRepository.existsById("tractorOperators")) {
+            commonRepository.saveAll((new CommonInitBuilder()).tractorOperators().build());
+        }
+
+        if (!commonRepository.existsById("bedTypes")) {
+            commonRepository.saveAll((new CommonInitBuilder()).bedTypes().build());
+        }
+
+        if (!commonRepository.existsById("bedCounts")) {
+            commonRepository.saveAll((new CommonInitBuilder()).bedCounts().build());
+        }
+
+        if (!commonRepository.existsById("commodities")) {
+            commonRepository.saveAll((new CommonInitBuilder()).commodities().build());
+        }
+    }
+}
