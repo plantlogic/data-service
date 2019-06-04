@@ -22,7 +22,7 @@ public class CardViewController {
     private RanchRepository ranchRepository;
 
     @GetMapping("/ranches")
-    @ApiOperation(value = "Get all cards from the databse.", authorizations = {@Authorization(value = "Bearer")})
+    @ApiOperation(value = "Get all cards from the database.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getAllRanchData(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
         Sort sortByRanchName = Sort.by(Sort.Order.asc("fieldID"), Sort.Order.desc("lastUpdated"));
@@ -38,22 +38,26 @@ public class CardViewController {
     }
 
     @GetMapping("/ranches/{id}")
+    @ApiOperation(value = "Get card from the database by its ID.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getRanchData(@PathVariable("id") String id) {
         Optional<RestDTO> data = ranchRepository.findById(id).map(RestData::new);
         return data.orElse(new RestFailure("card ID not found."));
     }
 
     @GetMapping("/ranches/ranchName/{ranchName}")
+    @ApiOperation(value = "Get all cards from the database by ranch name.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getRanchDataByRanchName(@PathVariable("ranchName") String ranchName) {
         return new RestData<>(ranchRepository.findByRanchName(ranchName));
     }
 
     @GetMapping("/ranches/ranchManager/{ranchManagerName}")
+    @ApiOperation(value = "Get all cards from the database by ranch manager name.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getRanchDataByRanchManagerName(@PathVariable("ranchManagerName") String ranchManagerName) {
         return new RestData<>(ranchRepository.findByRanchManagerName(ranchManagerName));
     }
 
-    @GetMapping("ranches/fieldID/{fieldID}")
+    @GetMapping("/ranches/fieldID/{fieldID}")
+    @ApiOperation(value = "Get all cards from the database by field ID.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getRanchDataByFieldID(@PathVariable("fieldID") Integer fieldID){
         return new RestData<>(ranchRepository.findByFieldID(fieldID));
     }

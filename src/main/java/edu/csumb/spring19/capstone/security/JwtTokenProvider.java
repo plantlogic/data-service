@@ -2,7 +2,6 @@ package edu.csumb.spring19.capstone.security;
 
 import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.models.authentication.PLRole;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
