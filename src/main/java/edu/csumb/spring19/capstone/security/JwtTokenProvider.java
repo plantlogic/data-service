@@ -1,12 +1,18 @@
 package edu.csumb.spring19.capstone.security;
 
+import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.models.authentication.PLRole;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -16,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
+    private final String authURL = "http://userservice:8080/api/user/me/tokenValid";
 
     public Authentication getAuthentication(String token) {
         String unsignedToken = token.substring(0, token.lastIndexOf('.') + 1);
@@ -48,12 +55,16 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public boolean validateToken(String token) throws Exception {
+    public boolean validateToken(String token) {
         try {
-            // TODO: Perform API call to user service
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new Exception("Expired or invalid JWT token.");
-        }
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + token);
+            HttpEntity entity = new HttpEntity(headers);
+
+            ResponseEntity<RestDTO> auth = (new RestTemplate()).exchange(authURL, HttpMethod.GET, entity, RestDTO.class);
+            if (auth.hasBody() && auth.getBody() != null) return auth.getBody().getSuccess();
+        } catch (Exception ignored) {}
+
+        return false;
     }
 }
