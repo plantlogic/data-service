@@ -7,14 +7,18 @@ import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.common.CommonData;
 import edu.csumb.spring19.capstone.models.common.CommonInitService;
 import edu.csumb.spring19.capstone.repos.CommonRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
+@PreAuthorize("hasRole('APP_ADMIN')")
 public class CommonDataController{
     @Value("${ALLOW_COMMON_RESET:false}")
     private Boolean allowReset;
@@ -25,6 +29,7 @@ public class CommonDataController{
     private CommonRepository commonRepository;
 
     @GetMapping("/common/{id}")
+    @ApiOperation(value = "Get common data by category.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getCommonData(@PathVariable("id") String id) {
         Optional<CommonData> data = commonRepository.findById(id);
         if (data.isPresent()) return new RestData<>(data);
@@ -32,11 +37,13 @@ public class CommonDataController{
     }
 
     @GetMapping("/common")
+    @ApiOperation(value = "Get all possible common data combinations.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());
     }
 
     @PutMapping({"/admin/common"})
+    @ApiOperation(value = "Update common data by category.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO updateCommonData(@RequestBody CommonData common) {
         Optional<RestDTO> data = commonRepository.findById(common.getKey())
               .map(commonData -> {
@@ -47,6 +54,7 @@ public class CommonDataController{
     }
 
     @DeleteMapping({"/admin/reset"})
+    @ApiOperation(value = "Deletes all common data and resets categories.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO resetCommonData() {
         if (allowReset) {
             commonRepository.deleteAll();

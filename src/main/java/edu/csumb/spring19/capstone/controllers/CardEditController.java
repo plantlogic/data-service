@@ -5,7 +5,10 @@ import edu.csumb.spring19.capstone.dto.RestFailure;
 import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.card.Card;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.LimitExceededException;
@@ -15,12 +18,14 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/edit")
+@PreAuthorize("hasRole('DATA_EDIT')")
 public class CardEditController {
 
     @Autowired
     private RanchRepository ranchRepository;
 
-    @PutMapping("ranches/{id}")
+    @PutMapping("/ranches/{id}")
+    @ApiOperation(value = "Overwrite a card by it's ID.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO updateRanchData(@PathVariable("id") String id, @Valid @RequestBody Card ranch) {
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(card -> {
@@ -52,7 +57,8 @@ public class CardEditController {
         return data.orElse(new RestFailure("card ID not found."));
     }
 
-    @PutMapping("ranches/{id}/state")
+    @PutMapping("/ranches/{id}/state")
+    @ApiOperation(value = "Toggle the state of a card between closed/open.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO setRanchDataState(@PathVariable("id") String id, @RequestParam Boolean closed) {
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(card -> {
@@ -64,7 +70,8 @@ public class CardEditController {
         return data.orElse(new RestFailure("card ID not found."));
     }
 
-    @DeleteMapping("ranches/{id}")
+    @DeleteMapping("/ranches/{id}")
+    @ApiOperation(value = "Delete a card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO deleteRanchData(@PathVariable("id") String id){
         Optional<RestDTO> data = ranchRepository.findById(id)
               .map(ranch -> {
