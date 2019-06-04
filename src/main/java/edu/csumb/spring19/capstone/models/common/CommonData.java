@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Document(collection="common")
 @JsonIgnoreProperties(ignoreUnknown = true, allowGetters = true)
 public class CommonData<E> {
