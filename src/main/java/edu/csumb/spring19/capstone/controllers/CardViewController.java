@@ -57,7 +57,7 @@ public class CardViewController {
     public RestDTO getRanchData(@PathVariable("id") String id) {
         Optional<Card> card = ranchRepository.findById(id);
 
-        if (ranchAccess.cardViewAccessAllowed(card)) return new RestData<>(card.get());
+        if (ranchAccess.cardExistsAndViewAllowed(card)) return new RestData<>(card.get());
         else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
     }
 }

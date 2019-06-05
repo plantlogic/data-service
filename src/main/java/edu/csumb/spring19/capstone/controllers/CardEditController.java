@@ -32,7 +32,7 @@ public class CardEditController {
     @ApiOperation(value = "Overwrite a card by it's ID.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO updateRanchData(@PathVariable("id") String id, @Valid @RequestBody Card ranch) {
         Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardViewAccessAllowed(card)) {
+        if (ranchAccess.cardExistsAndViewAllowed(card)) {
             card.get().setLastUpdated();
             card.get().setRanchName(ranch.getRanchName());
             card.get().setFieldID(ranch.getFieldID());

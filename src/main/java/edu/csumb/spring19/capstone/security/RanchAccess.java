@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Component
 public class RanchAccess {
-    public boolean cardViewAccessAllowed(Optional<Card> card) {
+    public boolean cardExistsAndViewAllowed(Optional<Card> card) {
         return (card.isPresent() && (
 
               // Has all access

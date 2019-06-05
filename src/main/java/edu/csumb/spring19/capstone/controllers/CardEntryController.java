@@ -36,7 +36,7 @@ public class CardEntryController {
     @PostMapping("/ranches")
     @ApiOperation(value = "Create a new card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO createRanchData(@Valid @RequestBody Card card) {
-        if (ranchAccess.cardViewAccessAllowed(Optional.of(card))) {
+        if (ranchAccess.cardExistsAndViewAllowed(Optional.of(card))) {
             ranchRepository.save(card);
             return new RestSuccess();
         } else return new RestFailure("There was an error saving the card. You may not be allowed to save to that ranch.");
@@ -54,7 +54,7 @@ public class CardEntryController {
     public RestDTO getRanchData(@PathVariable("id") String id) {
         Optional<Card> card = ranchRepository.findById(id);
 
-        if (ranchAccess.cardViewAccessAllowed(card)) return new RestData<>(card.get());
+        if (ranchAccess.cardExistsAndViewAllowed(card)) return new RestData<>(card.get());
         else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
     }
 
@@ -62,7 +62,7 @@ public class CardEntryController {
     @ApiOperation(value = "Add tractor data to a card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody Tractor data) {
         Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardViewAccessAllowed(card)) {
+        if (ranchAccess.cardExistsAndViewAllowed(card)) {
             try {
                 card.get().addTractor(data);
             } catch (LimitExceededException e) {
@@ -79,7 +79,7 @@ public class CardEntryController {
     @ApiOperation(value = "Add Irrigation data to a card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO addIrrigationData(@PathVariable("id") String id, @RequestBody Irrigation data) {
         Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardViewAccessAllowed(card)) {
+        if (ranchAccess.cardExistsAndViewAllowed(card)) {
             try {
                 card.get().addIrrigation(data);
             } catch (LimitExceededException e) {
@@ -96,7 +96,7 @@ public class CardEntryController {
     @ApiOperation(value = "Add chemical data to a card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO addChemicalData(@PathVariable("id") String id, @RequestBody Chemicals data) {
         Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardViewAccessAllowed(card)) {
+        if (ranchAccess.cardExistsAndViewAllowed(card)) {
             try {
                 card.get().addPostChemicals(data);
             } catch (LimitExceededException e) {
@@ -114,7 +114,7 @@ public class CardEntryController {
     public RestDTO closeCard(@PathVariable("id") String id, @RequestBody Card ranch) {
         Optional<Card> card = ranchRepository.findById(id);
 
-        if (ranchAccess.cardViewAccessAllowed(card)) {
+        if (ranchAccess.cardExistsAndViewAllowed(card)) {
             card.get().setHarvestDate(ranch.getHarvestDate());
             card.get().setClosed(true);
             card.get().setLastUpdated();
