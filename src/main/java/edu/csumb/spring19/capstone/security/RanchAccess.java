@@ -15,19 +15,18 @@ import java.util.Optional;
 @Component
 public class RanchAccess {
     public boolean cardViewAccessAllowed(Optional<Card> card) {
-        return (
+        return (card.isPresent() && (
 
               // Has all access
               this.hasRole(PLRole.DATA_VIEW)
 
               || // or
 
-              // Card exists, card is open, and rancher has access to ranch
-              (card.isPresent() &&
-                    !card.get().getClosed() &&
+              // Card is open, and rancher has access to ranch
+              (!card.get().getClosed() &&
                     this.getRanchList().contains(card.get().getRanchName()))
 
-        );
+        ));
     }
 
     public boolean hasRole(GrantedAuthority a) {
