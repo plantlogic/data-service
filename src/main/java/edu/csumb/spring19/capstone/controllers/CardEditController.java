@@ -71,7 +71,7 @@ public class CardEditController {
                       ranchRepository.save(card);
                       return new RestSuccess();
                   });
-            return data.orElse(new RestFailure("card ID not found."));
+            return data.orElse(new RestFailure("Card ID not found."));
         } else return new RestFailure("Card ID not found, or you don't have permission to perform this action.");
     }
 
@@ -84,7 +84,7 @@ public class CardEditController {
                       ranchRepository.deleteById(id);
                       return new RestSuccess();
                   });
-            return data.orElse(new RestFailure("card ID not found."));
+            return data.orElse(new RestFailure("Card ID not found."));
         } else return new RestFailure("Card ID not found, or you don't have permission to perform this action.");
     }
 }
