@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@PreAuthorize("hasRole('APP_ADMIN')")
 public class CommonDataController{
     @Value("${ALLOW_COMMON_RESET:false}")
     private Boolean allowReset;
@@ -29,6 +28,7 @@ public class CommonDataController{
     private CommonRepository commonRepository;
 
     @GetMapping("/common/{id}")
+    @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT')")
     @ApiOperation(value = "Get common data by category.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getCommonData(@PathVariable("id") String id) {
         Optional<CommonData> data = commonRepository.findById(id);
@@ -37,12 +37,14 @@ public class CommonDataController{
     }
 
     @GetMapping("/common")
+    @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT')")
     @ApiOperation(value = "Get all possible common data combinations.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());
     }
 
     @PutMapping({"/admin/common"})
+    @PreAuthorize("hasRole('APP_ADMIN')")
     @ApiOperation(value = "Update common data by category.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO updateCommonData(@RequestBody CommonData common) {
         Optional<RestDTO> data = commonRepository.findById(common.getKey())
@@ -54,6 +56,7 @@ public class CommonDataController{
     }
 
     @DeleteMapping({"/admin/reset"})
+    @PreAuthorize("hasRole('APP_ADMIN')")
     @ApiOperation(value = "Deletes all common data and resets categories.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO resetCommonData() {
         if (allowReset) {
