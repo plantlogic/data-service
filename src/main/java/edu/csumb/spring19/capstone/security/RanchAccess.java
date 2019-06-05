@@ -1,7 +1,9 @@
 package edu.csumb.spring19.capstone.security;
 
+import edu.csumb.spring19.capstone.models.authentication.PLRole;
 import edu.csumb.spring19.capstone.models.card.Card;
 import io.jsonwebtoken.Jwts;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,26 @@ import java.util.Optional;
 
 @Component
 public class RanchAccess {
+    public boolean cardViewAccessAllowed(Optional<Card> card) {
+        return (
+
+              // Has all access
+              this.hasRole(PLRole.DATA_VIEW)
+
+              || // or
+
+              // Card exists, card is open, and rancher has access to ranch
+              (card.isPresent() &&
+                    !card.get().getClosed() &&
+                    this.getRanchList().contains(card.get().getRanchName()))
+
+        );
+    }
+
+    public boolean hasRole(GrantedAuthority a) {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(a);
+    }
+
     public List<String> getRanchList() {
         String token = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getCredentials());
         String unsignedToken = token.substring(0, token.lastIndexOf('.') + 1);
@@ -23,15 +45,5 @@ public class RanchAccess {
         list = list.substring(1, list.length() - 1);
 
         return Arrays.asList(list.split(", "));
-    }
-
-    public boolean cardAccessAllowed(Optional<Card> card) {
-
-        // Card exists, card is open, and rancher has access to ranch
-        return (
-                    card.isPresent() &&
-                    !card.get().getClosed() &&
-                    this.getRanchList().contains(card.get().getRanchName())
-        );
     }
 }
