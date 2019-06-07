@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.LimitExceededException;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -37,7 +38,7 @@ public class CardEntryController {
     @ApiOperation(value = "Create a new card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO createRanchData(@Valid @RequestBody Card card) {
         if (ranchAccess.cardExistsAndViewAllowed(Optional.of(card))) {
-            card.initDateCreated();
+            card.setDateCreated(new Date());
             ranchRepository.save(card);
             return new RestSuccess();
         } else return new RestFailure("There was an error saving the card. You may not be allowed to save to that ranch.");

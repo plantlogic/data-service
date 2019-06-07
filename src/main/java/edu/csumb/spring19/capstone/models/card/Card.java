@@ -71,8 +71,8 @@ public class Card {
         return dateCreated;
     }
 
-    public void initDateCreated() {
-        if (dateCreated == null) dateCreated = new Date();
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public List<Irrigation> getIrrigation() {
