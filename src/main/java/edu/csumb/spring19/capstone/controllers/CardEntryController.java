@@ -37,6 +37,7 @@ public class CardEntryController {
     @ApiOperation(value = "Create a new card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO createRanchData(@Valid @RequestBody Card card) {
         if (ranchAccess.cardExistsAndViewAllowed(Optional.of(card))) {
+            card.initDateCreated();
             ranchRepository.save(card);
             return new RestSuccess();
         } else return new RestFailure("There was an error saving the card. You may not be allowed to save to that ranch.");
