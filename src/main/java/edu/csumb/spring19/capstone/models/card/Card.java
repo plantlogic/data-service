@@ -19,6 +19,7 @@ public class Card {
     @Id
     private String id;
     private Boolean isClosed = false;
+    private Date dateCreated = new Date();
     private Date lastUpdated = new Date();
 
     private List<Irrigation> irrigation;
@@ -64,6 +65,10 @@ public class Card {
 
     public void setLastUpdated() {
         this.lastUpdated = new Date();
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
     public List<Irrigation> getIrrigation() {
