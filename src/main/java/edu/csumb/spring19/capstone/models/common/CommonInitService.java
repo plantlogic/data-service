@@ -31,7 +31,7 @@ public class CommonInitService {
         }
 
         if (!commonRepository.existsById("bedCounts")) {
-            commonRepository.saveAll((new CommonInitBuilder()).bedCounts().build());
+            commonRepository.deleteById("bedCounts");
         }
 
         if (!commonRepository.existsById("commodities")) {
