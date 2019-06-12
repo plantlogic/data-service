@@ -30,7 +30,7 @@ public class CommonInitService {
             commonRepository.saveAll((new CommonInitBuilder()).bedTypes().build());
         }
 
-        if (!commonRepository.existsById("bedCounts")) {
+        if (commonRepository.existsById("bedCounts")) {
             commonRepository.deleteById("bedCounts");
         }
 
