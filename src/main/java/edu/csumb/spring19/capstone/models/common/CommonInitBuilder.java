@@ -37,11 +37,6 @@ public class CommonInitBuilder {
         return this;
     }
 
-    public CommonInitBuilder bedCounts() {
-        common.add(new CommonData<List<Integer>>("bedCounts", new ArrayList<>()));
-        return this;
-    }
-
     // Contains both commodities and the sublist of varieties
     public CommonInitBuilder commodities() {
         CommonData<HashMap<String, List<String>>> list = new CommonData<>("commodities", new HashMap<>());
