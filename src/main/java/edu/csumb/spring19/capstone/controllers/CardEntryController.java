@@ -111,6 +111,21 @@ public class CardEntryController {
         } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
     }
 
+    @PostMapping("/ranches/{id}/wet.thin.hoe")
+    @ApiOperation(value = "Set the wet, thin, and hoe dates of a card.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO addWetThinHoeData(@PathVariable("id") String id, @RequestBody Card data) {
+        Optional<Card> card = ranchRepository.findById(id);
+        if (ranchAccess.cardExistsAndViewAllowed(card)) {
+            card.get().setWetDate(data.getWetDate());
+            card.get().setThinDate(data.getThinDate());
+            card.get().setHoeDate(data.getHoeDate());
+
+            card.get().setLastUpdated();
+            ranchRepository.save(card.get());
+            return new RestSuccess();
+        } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+    }
+
     @PutMapping("/ranches/{id}/close")
     @ApiOperation(value = "Close card when completed.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO closeCard(@PathVariable("id") String id, @RequestBody Card ranch) {
