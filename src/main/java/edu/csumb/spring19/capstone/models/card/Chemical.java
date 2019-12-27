@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Chemical {
     private String name;
     private Float rate;
-    private ChemicalUnit unit;
+    private String unit;
 
     public String getName() {
         return name;
@@ -27,15 +27,11 @@ public class Chemical {
         this.rate = rate;
     }
 
-    public ChemicalUnit getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(ChemicalUnit unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
-}
-
-enum ChemicalUnit {
-    Gallons, Pounds;
 }

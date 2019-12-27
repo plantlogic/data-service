@@ -22,6 +22,10 @@ public class CommonInitService {
             commonRepository.saveAll((new CommonInitBuilder()).chemicals().build());
         }
 
+        if (!commonRepository.existsById("chemicalRateUnits")) {
+            commonRepository.saveAll((new CommonInitBuilder()).chemicalRateUnits().build());
+        }
+
         if (!commonRepository.existsById("tractorOperators")) {
             commonRepository.saveAll((new CommonInitBuilder()).tractorOperators().build());
         }
