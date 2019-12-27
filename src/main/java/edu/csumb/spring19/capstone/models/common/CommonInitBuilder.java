@@ -27,6 +27,11 @@ public class CommonInitBuilder {
         return this;
     }
 
+    public CommonInitBuilder chemicalRateUnits() {
+        common.add(new CommonData<List<String>>("chemicalRateUnits", new ArrayList<>()));
+        return this;
+    }
+
     public CommonInitBuilder tractorOperators() {
         common.add(new CommonData<List<String>>("tractorOperators", new ArrayList<>()));
         return this;
