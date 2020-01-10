@@ -26,8 +26,16 @@ public class CommonInitService {
             commonRepository.saveAll((new CommonInitBuilder()).chemicalRateUnits().build());
         }
 
+        if (!commonRepository.existsById("irrigationMethod")) {
+            commonRepository.saveAll((new CommonInitBuilder()).irrigationMethod().build());
+        }
+
         if (!commonRepository.existsById("tractorOperators")) {
             commonRepository.saveAll((new CommonInitBuilder()).tractorOperators().build());
+        }
+
+        if (!commonRepository.existsById("tractorWork")) {
+            commonRepository.saveAll((new CommonInitBuilder()).tractorWork().build());
         }
 
         if (!commonRepository.existsById("bedTypes")) {
