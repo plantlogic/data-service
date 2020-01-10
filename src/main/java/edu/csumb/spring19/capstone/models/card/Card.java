@@ -34,6 +34,7 @@ public class Card {
     private String ranchManagerName;
     private String lotNumber;
     private String shipperID;
+    private String comment;
 
     private Date wetDate;
     private Date thinDate;
@@ -181,6 +182,14 @@ public class Card {
 
     public void setShipperID(String shipperID) {
         this.shipperID = shipperID;
+    }
+    
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Date getWetDate() {

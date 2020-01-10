@@ -32,8 +32,18 @@ public class CommonInitBuilder {
         return this;
     }
 
+    public CommonInitBuilder irrigationMethod() {
+        common.add(new CommonData<List<String>>("irrigationMethod", new ArrayList<>()));
+        return this;
+    }
+
     public CommonInitBuilder tractorOperators() {
         common.add(new CommonData<List<String>>("tractorOperators", new ArrayList<>()));
+        return this;
+    }
+
+    public CommonInitBuilder tractorWork() {
+        common.add(new CommonData<List<String>>("tractorWork", new ArrayList<>()));
         return this;
     }
 
