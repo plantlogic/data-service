@@ -41,6 +41,9 @@ public class Card {
     private Date hoeDate;
     private Date harvestDate;
 
+    private WorkType thinType;
+    private WorkType hoeType;
+
     private Integer cropYear = Calendar.getInstance().get(Calendar.YEAR);
 
 
@@ -231,4 +234,25 @@ public class Card {
     public void setCropYear(Integer cropYear) {
         this.cropYear = cropYear;
     }
+
+    public WorkType getThinType() {
+        return thinType;
+    }
+
+    public void setThinType(WorkType thinType) {
+        this.thinType = thinType;
+    }
+
+    public WorkType getHoeType() {
+        return hoeType;
+    }
+
+    public void setHoeType(WorkType hoeType) {
+        this.hoeType = hoeType;
+    }
+
+
+}
+enum WorkType {
+    Hand, Machine;
 }
