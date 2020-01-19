@@ -56,6 +56,8 @@ public class CardEditController {
             card.get().setHoeDate(ranch.getHoeDate());
             card.get().setHarvestDate(ranch.getHarvestDate());
             card.get().setComment(ranch.getComment());
+            card.get().setThinType(ranch.getThinType());
+            card.get().setHoeType(ranch.getHoeType());
             ranchRepository.save(card.get());
             return new RestSuccess();
         } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
