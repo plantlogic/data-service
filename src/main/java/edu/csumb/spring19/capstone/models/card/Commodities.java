@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Commodities {
     private String commodity;
     private Float cropAcres;
-    private Integer bedType;
+    private String bedType;
     private Integer bedCount;
-    private Integer seedLotNumber;
+    private String seedLotNumber;
     private String variety;
 
     public String getCommodity() {
@@ -25,10 +25,10 @@ public class Commodities {
     public void setCropAcres(Float cropAcres) {
         this.cropAcres = cropAcres;
     }
-    public Integer getBedType() {
+    public String getBedType() {
         return bedType;
     }
-    public void setBedType(Integer bedType) {
+    public void setBedType(String bedType) {
         this.bedType = bedType;
     }
     public Integer getBedCount() {
@@ -37,10 +37,10 @@ public class Commodities {
     public void setBedCount(Integer bedCount) {
         this.bedCount = bedCount;
     }
-    public Integer getSeedLotNumber() {
+    public String getSeedLotNumber() {
         return seedLotNumber;
     }
-    public void setSeedLotNumber(Integer seedLotNumber) {
+    public void setSeedLotNumber(String seedLotNumber) {
         this.seedLotNumber = seedLotNumber;
     }
     public String getVariety() {

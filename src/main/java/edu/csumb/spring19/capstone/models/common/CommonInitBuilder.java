@@ -48,7 +48,7 @@ public class CommonInitBuilder {
     }
 
     public CommonInitBuilder bedTypes() {
-        common.add(new CommonData<List<Integer>>("bedTypes", new ArrayList<>()));
+        common.add(new CommonData<List<String>>("bedTypes", new ArrayList<>()));
         return this;
     }
 
