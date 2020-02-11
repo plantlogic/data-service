@@ -13,6 +13,7 @@ public class Tractor {
     private String operator;
     private Chemical chemical;
     private Chemical fertilizer;
+    private String tractorNumber;
 
     public Date getWorkDate() {
         return workDate;
@@ -52,5 +53,13 @@ public class Tractor {
 
     public void setFertilizer(Chemical fertilizer) {
         this.fertilizer = fertilizer;
+    }
+
+    public String getTractorNumber() {
+        return tractorNumber;
+    }
+
+    public void setTractorNumber(String tractorNumber) {
+        this.tractorNumber = tractorNumber;
     }
 }
