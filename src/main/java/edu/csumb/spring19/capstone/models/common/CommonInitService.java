@@ -30,6 +30,10 @@ public class CommonInitService {
             commonRepository.saveAll((new CommonInitBuilder()).irrigationMethod().build());
         }
 
+        if (!commonRepository.existsById("irrigators")) {
+            commonRepository.saveAll((new CommonInitBuilder()).irrigators().build());
+        }
+
         if (!commonRepository.existsById("tractorOperators")) {
             commonRepository.saveAll((new CommonInitBuilder()).tractorOperators().build());
         }

@@ -12,6 +12,7 @@ public class Irrigation {
     private String method;
     private Chemical chemical;
     private Chemical fertilizer;
+    private String irrigator;
 
 
     public Date getWorkDate() {
@@ -44,5 +45,13 @@ public class Irrigation {
 
     public void setFertilizer(Chemical fertilizer) {
         this.fertilizer = fertilizer;
+    }
+
+    public String getIrrigator() {
+        return irrigator;
+    }
+
+    public void setIrrigator(String irrigator) {
+        this.irrigator = irrigator;
     }
 }

@@ -37,6 +37,11 @@ public class CommonInitBuilder {
         return this;
     }
 
+    public CommonInitBuilder irrigators() {
+        common.add(new CommonData<List<String>>("irrigators", new ArrayList<>()));
+        return this;
+    }
+
     public CommonInitBuilder tractorOperators() {
         common.add(new CommonData<List<String>>("tractorOperators", new ArrayList<>()));
         return this;
@@ -50,7 +55,7 @@ public class CommonInitBuilder {
     public CommonInitBuilder bedTypes() {
         common.add(new CommonData<List<String>>("bedTypes", new ArrayList<>()));
         return this;
-    }
+    }    
 
     // Contains both commodities and the sublist of varieties
     public CommonInitBuilder commodities() {
