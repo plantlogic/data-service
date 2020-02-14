@@ -50,6 +50,7 @@ public class CardEditController {
 
             card.get().setLotNumber(ranch.getLotNumber());
             card.get().setShipperID(ranch.getShipperID());
+            card.get().setPlanterNumber(ranch.getPlanterNumber());
             card.get().setCropYear(ranch.getCropYear());
             card.get().setWetDate(ranch.getWetDate());
             card.get().setThinDate(ranch.getThinDate());
