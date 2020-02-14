@@ -34,6 +34,7 @@ public class Card {
     private String ranchManagerName;
     private String lotNumber;
     private String shipperID;
+    private String planterNumber;
     private String comment;
 
     private Date wetDate;
@@ -185,6 +186,14 @@ public class Card {
 
     public void setShipperID(String shipperID) {
         this.shipperID = shipperID;
+    }
+
+    public String getPlanterNumber() {
+        return planterNumber;
+    }
+
+    public void setPlanterNumber(String planterNumber) {
+        this.planterNumber = planterNumber;
     }
     
     public String getComment() {
