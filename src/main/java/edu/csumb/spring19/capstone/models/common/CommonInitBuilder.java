@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 public class CommonInitBuilder {
     private ArrayList<CommonData> common = new ArrayList<>();
 
@@ -12,55 +14,116 @@ public class CommonInitBuilder {
         return common;
     }
 
+    /*
+        Format we desire for non-commodities
+
+        "_id": "ranches",
+        "values": [
+            {   
+                id: 'e817w7a7d7f',
+                orderNum: 0,
+                value : 'Ranch 1'
+            }
+        ]
+    */
+
     public CommonInitBuilder ranches() {
-        common.add(new CommonData<List<String>>("ranches", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "Baillie");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "Spreckles");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("ranches", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder fertilizers() {
-        common.add(new CommonData<List<String>>("fertilizers", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "0-0-20");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "6-16-0 (LIQ)");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("fertilizers", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder chemicals() {
-        common.add(new CommonData<List<String>>("chemicals", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "Kerb");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "RoundUp");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("chemicals", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder chemicalRateUnits() {
-        common.add(new CommonData<List<String>>("chemicalRateUnits", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "Gallons");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "Pounds");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("chemicalRateUnits", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder irrigationMethod() {
-        common.add(new CommonData<List<String>>("irrigationMethod", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "Drip");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "Furrow");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("irrigationMethod", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder irrigators() {
-        common.add(new CommonData<List<String>>("irrigators", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "John Smith");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "Jane Doe");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("irrigators", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder tractorOperators() {
-        common.add(new CommonData<List<String>>("tractorOperators", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "Dave Smith");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "Erica Doe");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("tractorOperators", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder tractorWork() {
-        common.add(new CommonData<List<String>>("tractorWork", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "Initial Setup");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "Cultivate");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("tractorWork", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
     }
 
     public CommonInitBuilder bedTypes() {
-        common.add(new CommonData<List<String>>("bedTypes", new ArrayList<>()));
+        CommonDataValue<String> cdv1 = new CommonDataValue<String>((new ObjectId()).toString(), "20-20");
+        CommonDataValue<String> cdv2 = new CommonDataValue<String>((new ObjectId()).toString(), "40");        
+        CommonData<List<CommonDataValue<String>>> list = new CommonData<>("bedTypes", Arrays.asList(cdv1, cdv2));
+        common.add(list);
         return this;
-    }    
+    } 
 
-    // Contains both commodities and the sublist of varieties
+    /*
+        Format we desire for commodities
+
+        "_id": "commodities",
+        "values": [
+            {   
+                id: 'e817w7a7d6e',
+                orderNum: 0,
+                values: { 
+                    "Lettuce" : ["Variety 1", "Variety 2"]
+                },
+            }
+        ]
+    */
+
     public CommonInitBuilder commodities() {
-        CommonData<HashMap<String, List<String>>> list = new CommonData<>("commodities", new HashMap<>());
-        list.getValues().put("Lettuce", Arrays.asList("Variety 1", "Variety 2"));
+        HashMap<String, List<String>> innerHash = new HashMap<String, List<String>>();
+        innerHash.put("Lettuce", Arrays.asList("Variety 1", "Variety 2"));
+        CommonDataValue<HashMap<String, List<String>>> cdv1 = new CommonDataValue<HashMap<String, List<String>>>((new ObjectId()).toString(), innerHash);
+        
+        HashMap<String, List<String>> innerHash2 = new HashMap<String, List<String>>();
+        innerHash2.put("Cabbage", Arrays.asList("Variety 1", "Variety 2"));
+        CommonDataValue<HashMap<String, List<String>>> cdv2 = new CommonDataValue<HashMap<String, List<String>>>((new ObjectId()).toString(), innerHash2);
+        
+        CommonData<List<CommonDataValue<HashMap<String, List<String>>>>> list = new CommonData<>("commodities", Arrays.asList(cdv1, cdv2));
         common.add(list);
         return this;
     }
