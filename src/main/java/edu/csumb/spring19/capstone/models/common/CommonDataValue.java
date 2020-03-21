@@ -8,6 +8,10 @@ public class CommonDataValue<E> {
     private String id;
     private E value;
 
+    public CommonDataValue() {
+        this(new ObjectId().toString(), null);
+    }
+
     public CommonDataValue(E value) {
         this(new ObjectId().toString(), value);
     }
