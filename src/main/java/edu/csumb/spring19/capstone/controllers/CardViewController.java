@@ -48,7 +48,6 @@ public class CardViewController {
         } else if (ranchAccess.hasRole(PLRole.DATA_ENTRY)) {
             result = new RestData<>(ranchRepository.findAllByIsClosedFalseAndRanchNameIsIn(ranchAccess.getRanchList(), sortByRanchName));
         }
-
         return result;
     }
 
