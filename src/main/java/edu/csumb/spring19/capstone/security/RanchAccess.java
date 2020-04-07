@@ -37,10 +37,7 @@ public class RanchAccess {
         if (!allowClosed && card.get().getClosed()) {
             return false;
         }
-        if (this.getRanchList().contains(card.get().getRanchName())) {
-            return true;
-        }
-        return false;
+        return this.getRanchList().contains(card.get().getRanchName());
     }
 
     public boolean cardExistsAndHasAnyPermissions(PLRole[] roles, Boolean allowClosed, Optional<Card> card) {
