@@ -13,7 +13,9 @@ public interface RanchRepository extends MongoRepository<Card, String>{
     List<Card> findByRanchManagerName(String ranchManagerName);
     Iterable<Card> findAllByIsClosedTrue(Sort sort);
     Iterable<Card> findAllByIsClosedFalse(Sort sort);
+    Iterable<Card> findAllByRanchNameIsIn(List<String> ranchNames, Sort sort);
     Iterable<Card> findAllByIsClosedFalseAndRanchNameIsIn(List<String> ranchNames, Sort sort);
+    Iterable<Card> findAllByIsClosedTrueAndRanchNameIsIn(List<String> ranchNames, Sort sort);
     List<Card> findByFieldID(Integer fieldID);
 }
 

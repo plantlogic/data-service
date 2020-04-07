@@ -19,7 +19,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/view")
-@PreAuthorize("hasAnyRole('DATA_VIEW', 'DATA_ENTRY')")
+@PreAuthorize("hasAnyRole('DATA_VIEW', 'CONTRACTOR_VIEW')")
 public class CardViewController {
     @Autowired
     private RanchRepository ranchRepository;
@@ -35,19 +35,22 @@ public class CardViewController {
 
         Sort sortByRanchName = Sort.by(Sort.Order.asc("fieldID"), Sort.Order.desc("lastUpdated"));
 
-        if (ranchAccess.hasRole(PLRole.DATA_VIEW)) {
-            if (openCards && closedCards) {
-                result = new RestData<>(ranchRepository.findAll(sortByRanchName));
-            } else if (openCards) {
-                result = new RestData<>(ranchRepository.findAllByIsClosedFalse(sortByRanchName));
-            } else if (closedCards) {
-                result = new RestData<>(ranchRepository.findAllByIsClosedTrue(sortByRanchName));
-            } else {
-                result = new RestFailure("You requested no cards.");
-            }
-        } else if (ranchAccess.hasRole(PLRole.DATA_ENTRY)) {
+        // if (ranchAccess.hasRole(PLRole.DATA_VIEW) || ranchAccess.hasRole(PLRole.CONTRACTOR_VIEW)) {
+        if (openCards && closedCards) {
+            // result = new RestData<>(ranchRepository.findAll(sortByRanchName));
+            result = new RestData<>(ranchRepository.findAllByRanchNameIsIn(ranchAccess.getRanchList(), sortByRanchName));
+        } else if (openCards) {
+            // result = new RestData<>(ranchRepository.findAllByIsClosedFalse(sortByRanchName));
             result = new RestData<>(ranchRepository.findAllByIsClosedFalseAndRanchNameIsIn(ranchAccess.getRanchList(), sortByRanchName));
+        } else if (closedCards) {
+            // result = new RestData<>(ranchRepository.findAllByIsClosedTrue(sortByRanchName));
+            result = new RestData<>(ranchRepository.findAllByIsClosedTrueAndRanchNameIsIn(ranchAccess.getRanchList(), sortByRanchName));
+        } else {
+            result = new RestFailure("You requested no cards.");
         }
+        // } else if (ranchAccess.hasRole(PLRole.DATA_ENTRY)) {
+        //     result = new RestData<>(ranchRepository.findAllByIsClosedFalseAndRanchNameIsIn(ranchAccess.getRanchList(), sortByRanchName));
+        // }
         return result;
     }
 
@@ -55,8 +58,11 @@ public class CardViewController {
     @ApiOperation(value = "Get card from the database by its ID.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getRanchData(@PathVariable("id") String id) {
         Optional<Card> card = ranchRepository.findById(id);
-
-        if (ranchAccess.cardExistsAndViewAllowed(card)) return new RestData<>(card.get());
+        PLRole[] roles = {PLRole.DATA_VIEW, PLRole.CONTRACTOR_VIEW};
+        if (ranchAccess.cardExistsAndHasAnyPermissions(roles, true, card)) {
+            return new RestData<>(card.get());
+        }
+        // if (ranchAccess.cardExistsAndViewAllowed(card)) return new RestData<>(card.get());
         else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
     }
 }

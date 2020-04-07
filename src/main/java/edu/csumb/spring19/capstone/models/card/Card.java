@@ -35,7 +35,7 @@ public class Card {
     private String lotNumber;
     private String shipperID;
     private String planterNumber;
-    private String comment;
+    private List<Comment> comments;
 
     private Date wetDate;
     private Date thinDate;
@@ -195,13 +195,17 @@ public class Card {
     public void setPlanterNumber(String planterNumber) {
         this.planterNumber = planterNumber;
     }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
     
-    public String getComment() {
-        return comment;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public Date getWetDate() {
@@ -259,8 +263,6 @@ public class Card {
     public void setHoeType(WorkType hoeType) {
         this.hoeType = hoeType;
     }
-
-
 }
 enum WorkType {
     Hand, Machine;
