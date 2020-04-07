@@ -52,11 +52,7 @@ public class RanchAccess {
                 if (!allowClosed && card.get().getClosed()) {
                     return false;
                 }
-                if (this.getRanchList().contains(card.get().getRanchName())) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return this.getRanchList().contains(card.get().getRanchName());
             }
         }
         return false;
