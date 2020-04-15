@@ -49,7 +49,12 @@ public class RanchAccess {
                 if (!allowClosed && card.get().getClosed()) {
                     return false;
                 }
-                return this.getRanchList().contains(card.get().getRanchName());
+                if (role.equals(PLRole.SHIPPER)) {
+                    // Shipper is granted access to any card with matching shipper ID
+                    return true;
+                } else {
+                    return this.getRanchList().contains(card.get().getRanchName());
+                }
             }
         }
         return false;

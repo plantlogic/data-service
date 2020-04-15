@@ -33,7 +33,7 @@ public class Card {
     private Integer fieldID;
     private String ranchManagerName;
     private String lotNumber;
-    private String shipperID;
+    private List<String> shippers;
     private String planterNumber;
     private List<Comment> comments;
 
@@ -180,12 +180,16 @@ public class Card {
         this.lotNumber = lotNumber;
     }
 
-    public String getShipperID() {
-        return shipperID;
+    public void addShipper(String shipperID) {
+        this.shippers.add(shipperID);
     }
 
-    public void setShipperID(String shipperID) {
-        this.shipperID = shipperID;
+    public List<String> getShippers() {
+        return shippers;
+    }
+
+    public void setShippers(List<String> shippers) {
+        this.shippers = shippers;
     }
 
     public String getPlanterNumber() {

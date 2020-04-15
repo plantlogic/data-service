@@ -22,7 +22,6 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/edit")
-// @PreAuthorize("hasRole('DATA_EDIT')")
 public class CardEditController {
     @Autowired
     private RanchRepository ranchRepository;
@@ -55,7 +54,7 @@ public class CardEditController {
             }
 
             card.get().setLotNumber(ranch.getLotNumber());
-            card.get().setShipperID(ranch.getShipperID());
+            card.get().setShippers(ranch.getShippers());
             card.get().setPlanterNumber(ranch.getPlanterNumber());
             card.get().setCropYear(ranch.getCropYear());
             card.get().setWetDate(ranch.getWetDate());
@@ -88,7 +87,8 @@ public class CardEditController {
     @PutMapping("/ranches/{id}/setComments")
     @ApiOperation(value = "Adds a comment to a card", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO setComments(@PathVariable("id") String id, @Valid @RequestBody List<Comment> comments) {
-        if (ranchAccess.hasRole(PLRole.DATA_VIEW) || ranchAccess.hasRole(PLRole.CONTRACTOR_VIEW)) {
+        if (ranchAccess.hasRole(PLRole.DATA_VIEW) || ranchAccess.hasRole(PLRole.CONTRACTOR_VIEW)
+        || ranchAccess.hasRole(PLRole.SHIPPER)) {
             Optional<RestDTO> data = ranchRepository.findById(id)
                   .map(card -> {
                       card.setLastUpdated();
