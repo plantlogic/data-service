@@ -6,6 +6,7 @@ import edu.csumb.spring19.capstone.dto.RestFailure;
 import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.card.Card;
 import edu.csumb.spring19.capstone.models.card.Chemicals;
+import edu.csumb.spring19.capstone.models.card.Comment;
 import edu.csumb.spring19.capstone.models.card.Irrigation;
 import edu.csumb.spring19.capstone.models.card.Tractor;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.naming.LimitExceededException;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -109,6 +111,19 @@ public class CardEntryController {
             ranchRepository.save(card.get());
             return new RestSuccess();
         } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+    }
+
+    @PutMapping("/ranches/{id}/setComments")
+    @ApiOperation(value = "Sets a card comments", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO setComments(@PathVariable("id") String id, @Valid @RequestBody List<Comment> comments) {
+        Optional<RestDTO> data = ranchRepository.findById(id)
+              .map(card -> {
+                  card.setLastUpdated();
+                  card.setComments(comments);
+                  ranchRepository.save(card);
+                  return new RestSuccess();
+              });
+              return data.orElse(new RestFailure("Card ID not found."));
     }
 
     @PostMapping("/ranches/{id}/wet.thin.hoe")
