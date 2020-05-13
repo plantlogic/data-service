@@ -17,7 +17,16 @@ public class Irrigation {
     private List<Chemical> chemicals;
     private List<Chemical> fertilizers;
     private String irrigator;
-    private double duration;
+    private Double duration;
+
+    // ******************** DELETE ********************
+    private Chemical chemical;
+    private Chemical fertilizer;
+    public Chemical getChemical() { return chemical; }
+    public void setChemical(Chemical chemical) { this.chemical = chemical; }
+    public Chemical getFertilizer() { return fertilizer; }
+    public void setFertilizer(Chemical fertilizer) { this.fertilizer = fertilizer; }
+    // ************************************************
 
     public Date getWorkDate() {
         return workDate;
@@ -75,11 +84,11 @@ public class Irrigation {
         this.irrigator = irrigator;
     }
 
-    public double getDuration() {
+    public Double getDuration() {
         return duration;
     }
 
-    public void setDuration(double duration) {
+    public void setDuration(Double duration) {
         this.duration = duration;
     }
 }

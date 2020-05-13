@@ -3,6 +3,7 @@ package edu.csumb.spring19.capstone.controllers;
 import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
+import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.authentication.PLRole;
 import edu.csumb.spring19.capstone.models.card.Card;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
@@ -15,6 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+
+import javax.naming.LimitExceededException;
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
@@ -45,6 +49,41 @@ public class CardViewController {
             result = new RestFailure("You requested no cards.");
         }
         return result;
+    }
+
+    // DELETE
+    @PutMapping("/ranches/{id}")
+    @ApiOperation(value = "Overwrite a card by it's ID.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO updateRanchData(@PathVariable("id") String id, @Valid @RequestBody Card ranch) {
+        Optional<Card> card = ranchRepository.findById(id);
+        card.get().setLastUpdated();
+        card.get().setRanchName(ranch.getRanchName());
+        card.get().setFieldID(ranch.getFieldID());
+        card.get().setRanchManagerName(ranch.getRanchManagerName());
+
+        try {
+            card.get().setIrrigation(ranch.getIrrigation());
+            card.get().setTractor(ranch.getTractor());
+            card.get().setCommodities(ranch.getCommodities());
+            card.get().setPreChemicals(ranch.getPreChemicals());
+            card.get().setPostChemicals(ranch.getPostChemicals());
+        } catch (LimitExceededException e) {
+            return new RestFailure(e.getMessage());
+        }
+
+        card.get().setLotNumber(ranch.getLotNumber());
+        card.get().setShippers(ranch.getShippers());
+        card.get().setPlanterNumber(ranch.getPlanterNumber());
+        card.get().setCropYear(ranch.getCropYear());
+        card.get().setWetDate(ranch.getWetDate());
+        card.get().setThinDate(ranch.getThinDate());
+        card.get().setHoeDate(ranch.getHoeDate());
+        card.get().setHarvestDate(ranch.getHarvestDate());
+        card.get().setComments(ranch.getComments());
+        card.get().setThinType(ranch.getThinType());
+        card.get().setHoeType(ranch.getHoeType());
+        ranchRepository.save(card.get());
+        return new RestSuccess();
     }
 
     @GetMapping("/shipperRanches/{shipperId}")

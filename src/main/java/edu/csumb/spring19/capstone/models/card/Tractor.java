@@ -19,6 +19,15 @@ public class Tractor {
     private List<Chemical> fertilizers;
     private String tractorNumber;
 
+    // ******************** DELETE ********************
+    private Chemical chemical;
+    private Chemical fertilizer;
+    public Chemical getChemical() { return chemical; }
+    public void setChemical(Chemical chemical) { this.chemical = chemical; }
+    public Chemical getFertilizer() { return fertilizer; }
+    public void setFertilizer(Chemical fertilizer) { this.fertilizer = fertilizer; }
+    // ************************************************
+
     public Date getWorkDate() {
         return workDate;
     }
