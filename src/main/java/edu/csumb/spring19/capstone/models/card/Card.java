@@ -47,7 +47,6 @@ public class Card {
 
     private Integer cropYear = Calendar.getInstance().get(Calendar.YEAR);
 
-
     public String getId() {
         return id;
     }
