@@ -9,27 +9,8 @@ public class Comment {
     private String author;
     private String userName;
     private String body;
-
     // Role: "none", "grower", "shipper"
     private String role;
-
-    public Comment(String author, String userName, String body) {
-        this.author = author;
-        this.userName = userName;
-        this.body = body;
-        this.dateCreated = new Date();
-        this.dateModified = this.dateCreated;
-        this.role = "none";
-    }
-
-    public Comment(String author, String userName, String body, String role) {
-        this.author = author;
-        this.userName = userName;
-        this.body = body;
-        this.dateCreated = new Date();
-        this.dateModified = this.dateCreated;
-        this.role = role;
-    }
 
     public String getAuthor() {
         return author;
