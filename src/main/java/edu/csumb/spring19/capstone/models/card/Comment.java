@@ -9,14 +9,8 @@ public class Comment {
     private String author;
     private String userName;
     private String body;
-
-    public Comment(String author, String userName, String body) {
-        this.author = author;
-        this.userName = userName;
-        this.body = body;
-        this.dateCreated = new Date();
-        this.dateModified = this.dateCreated;
-    }
+    // Role: "none", "grower", "shipper"
+    private String role;
 
     public String getAuthor() {
         return author;
@@ -40,6 +34,14 @@ public class Comment {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Date getDateCreated() {
