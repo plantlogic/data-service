@@ -28,7 +28,7 @@ public class CommonDataController{
     private CommonRepository commonRepository;
 
     @GetMapping("/common/{id}")
-    @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT', 'SHIPPER')")
+    @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT', 'SHIPPER', 'IRRIGATOR')")
     @ApiOperation(value = "Get common data by category.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getCommonData(@PathVariable("id") String id) {
         Optional<CommonData> data = commonRepository.findById(id);
@@ -37,7 +37,7 @@ public class CommonDataController{
     }
 
     @GetMapping("/common")
-    @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT', 'SHIPPER')")
+    @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT', 'SHIPPER', 'IRRIGATOR')")
     @ApiOperation(value = "Get all possible common data combinations.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());

@@ -4,6 +4,7 @@ import edu.csumb.spring19.capstone.dto.RestDTO;
 import edu.csumb.spring19.capstone.dto.RestData;
 import edu.csumb.spring19.capstone.dto.RestFailure;
 import edu.csumb.spring19.capstone.dto.RestSuccess;
+import edu.csumb.spring19.capstone.models.authentication.PLRole;
 import edu.csumb.spring19.capstone.models.card.Card;
 import edu.csumb.spring19.capstone.models.card.Chemicals;
 import edu.csumb.spring19.capstone.models.card.Comment;
@@ -27,7 +28,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/entry")
-@PreAuthorize("hasRole('DATA_ENTRY')")
+@PreAuthorize("hasAnyRole('DATA_ENTRY','IRRIGATOR')")
 public class CardEntryController {
 
     @Autowired
@@ -39,11 +40,14 @@ public class CardEntryController {
     @PostMapping("/ranches")
     @ApiOperation(value = "Create a new card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO createRanchData(@Valid @RequestBody Card card) {
-        if (ranchAccess.cardExistsAndViewAllowed(Optional.of(card))) {
-            card.setDateCreated(new Date());
-            ranchRepository.save(card);
-            return new RestSuccess();
-        } else return new RestFailure("There was an error saving the card. You may not be allowed to save to that ranch.");
+        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
+            if (ranchAccess.cardExistsAndViewAllowed(Optional.of(card))) {
+                card.setDateCreated(new Date());
+                ranchRepository.save(card);
+                return new RestSuccess();
+            } else return new RestFailure("There was an error saving the card. You may not be allowed to save to that ranch.");
+        } else return new RestFailure("You don't have permission to create a card.");
+
     }
 
     @GetMapping("/ranches")
@@ -66,17 +70,18 @@ public class CardEntryController {
     @ApiOperation(value = "Add tractor data to a card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody Tractor data) {
         Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardExistsAndViewAllowed(card)) {
-            try {
-                card.get().addTractor(data);
-            } catch (LimitExceededException e) {
-                return new RestFailure(e.getMessage());
-            }
-
-            card.get().setLastUpdated();
-            ranchRepository.save(card.get());
-            return new RestSuccess();
-        } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
+            if (ranchAccess.cardExistsAndViewAllowed(card)) {
+                try {
+                    card.get().addTractor(data);
+                } catch (LimitExceededException e) {
+                    return new RestFailure(e.getMessage());
+                }
+                card.get().setLastUpdated();
+                ranchRepository.save(card.get());
+                return new RestSuccess();
+            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        } else return new RestFailure("You don't have permission to add tractor data to this card.");
     }
 
     @PostMapping("/ranches/{id}/irrigation")
@@ -89,7 +94,6 @@ public class CardEntryController {
             } catch (LimitExceededException e) {
                 return new RestFailure(e.getMessage());
             }
-
             card.get().setLastUpdated();
             ranchRepository.save(card.get());
             return new RestSuccess();
@@ -100,17 +104,18 @@ public class CardEntryController {
     @ApiOperation(value = "Add chemical data to a card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO addChemicalData(@PathVariable("id") String id, @RequestBody Chemicals data) {
         Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardExistsAndViewAllowed(card)) {
-            try {
-                card.get().addPostChemicals(data);
-            } catch (LimitExceededException e) {
-                return new RestFailure(e.getMessage());
-            }
-
-            card.get().setLastUpdated();
-            ranchRepository.save(card.get());
-            return new RestSuccess();
-        } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
+            if (ranchAccess.cardExistsAndViewAllowed(card)) {
+                try {
+                    card.get().addPostChemicals(data);
+                } catch (LimitExceededException e) {
+                    return new RestFailure(e.getMessage());
+                }
+                card.get().setLastUpdated();
+                ranchRepository.save(card.get());
+                return new RestSuccess();
+            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        } else return new RestFailure("You don't have permission to add chemical data to this card.");
     }
 
     @PutMapping("/ranches/{id}/setComments")
@@ -130,32 +135,31 @@ public class CardEntryController {
     @ApiOperation(value = "Set the wet, thin, and hoe dates of a card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO addWetThinHoeData(@PathVariable("id") String id, @RequestBody Card data) {
         Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardExistsAndViewAllowed(card)) {
-            card.get().setWetDate(data.getWetDate());
-            card.get().setThinDate(data.getThinDate());
-            card.get().setHoeDate(data.getHoeDate());
-
-            card.get().setLastUpdated();
-            ranchRepository.save(card.get());
-            return new RestSuccess();
-        } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
+            if (ranchAccess.cardExistsAndViewAllowed(card)) {
+                card.get().setWetDate(data.getWetDate());
+                card.get().setThinDate(data.getThinDate());
+                card.get().setHoeDate(data.getHoeDate());
+    
+                card.get().setLastUpdated();
+                ranchRepository.save(card.get());
+                return new RestSuccess();
+            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        } else return new RestFailure("You don't have permission to set the wet, thin, or hoe date on this card.");
     }
 
     @PutMapping("/ranches/{id}/close")
     @ApiOperation(value = "Close card when completed.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO closeCard(@PathVariable("id") String id, @RequestBody Card ranch) {
         Optional<Card> card = ranchRepository.findById(id);
-
-        if (ranchAccess.cardExistsAndViewAllowed(card)) {
-            card.get().setHarvestDate(ranch.getHarvestDate());
-            card.get().setClosed(true);
-            card.get().setLastUpdated();
-            ranchRepository.save(card.get());
-            return new RestSuccess();
-        } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
+            if (ranchAccess.cardExistsAndViewAllowed(card)) {
+                card.get().setHarvestDate(ranch.getHarvestDate());
+                card.get().setClosed(true);
+                card.get().setLastUpdated();
+                ranchRepository.save(card.get());
+                return new RestSuccess();
+            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        } else return new RestFailure("You don't have permission to close this card.");
     }
-
-
-
-
 }
