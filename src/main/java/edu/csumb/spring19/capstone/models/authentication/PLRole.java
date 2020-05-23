@@ -3,7 +3,15 @@ package edu.csumb.spring19.capstone.models.authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum PLRole implements GrantedAuthority {
-    DATA_ENTRY, DATA_VIEW, DATA_EDIT, USER_MANAGEMENT, CONTRACTOR_VIEW, CONTRACTOR_EDIT, APP_ADMIN, SHIPPER;
+    APP_ADMIN,
+    CONTRACTOR_EDIT,
+    CONTRACTOR_VIEW,
+    DATA_EDIT,
+    DATA_ENTRY,
+    DATA_VIEW,
+    IRRIGATOR,
+    SHIPPER,
+    USER_MANAGEMENT;
 
     @Override
     public String getAuthority() {
