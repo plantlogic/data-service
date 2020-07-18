@@ -47,7 +47,6 @@ public class CardEntryController {
                 return new RestSuccess();
             } else return new RestFailure("There was an error saving the card. You may not be allowed to save to that ranch.");
         } else return new RestFailure("You don't have permission to create a card.");
-
     }
 
     @GetMapping("/ranches")
