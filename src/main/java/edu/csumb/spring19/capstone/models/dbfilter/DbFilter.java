@@ -27,19 +27,7 @@ public class DbFilter {
     // Exclusive
     private int stop;
 
-    public DbFilter(String sort, String order, String fieldID, String lotNumber, List<String> ranches, List<String> commodities, 
-                    List<String> allCommoditiesOrdered, boolean isAllCommodities, int start, int stop) {
-        this.sort = sort;
-        this.order = order;
-        this.fieldID = fieldID;
-        this.lotNumber = lotNumber;
-        this.ranches = ranches;
-        this.commodities = commodities;
-        this.allCommoditiesOrdered = allCommoditiesOrdered;
-        this.isAllCommodities = isAllCommodities;
-        this.start = start;
-        this.stop = stop;
-    }
+    public DbFilter() {}
 
     public String getSort() {
         return sort;
