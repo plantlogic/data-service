@@ -27,8 +27,6 @@ public class DbFilter {
     // Exclusive
     private int stop;
 
-    public DbFilter() {}
-
     public String getSort() {
         return sort;
     }
