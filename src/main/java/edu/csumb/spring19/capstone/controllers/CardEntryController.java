@@ -8,8 +8,11 @@ import edu.csumb.spring19.capstone.models.authentication.PLRole;
 import edu.csumb.spring19.capstone.models.card.Card;
 import edu.csumb.spring19.capstone.models.card.Chemicals;
 import edu.csumb.spring19.capstone.models.card.Comment;
+import edu.csumb.spring19.capstone.models.card.Commodities;
 import edu.csumb.spring19.capstone.models.card.Irrigation;
 import edu.csumb.spring19.capstone.models.card.Tractor;
+import edu.csumb.spring19.capstone.models.dbfilter.DbFilter;
+import edu.csumb.spring19.capstone.models.dbfilter.DbFilterResponse;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import edu.csumb.spring19.capstone.security.RanchAccess;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +24,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.LimitExceededException;
 import javax.validation.Valid;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +46,75 @@ public class CardEntryController {
     @Autowired
     private RanchAccess ranchAccess;
     
+    @GetMapping("/commodityAcreCount")
+    @ApiOperation(value = "Get the total number of acres covered by each commodity among all open cards", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO getCommoditiesAcreCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
+                                   @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
+                                       
+        Iterable<Card> result = ranchRepository.findAllCommodityIds(ranchAccess.getRanchList(), false);
+        HashMap<String, Float> counts = new HashMap<String, Float>();
+        Iterator<Card> i = result.iterator();
+        while(i.hasNext()) {
+            for (Commodities c : i.next().getCommodities()) {
+                Float acres = c.getCropAcres();
+                if (acres == null) {
+                    acres = 0f;
+                }
+                if (counts.containsKey(c.getCommodity())) {
+                    counts.put(c.getCommodity(), counts.get(c.getCommodity()) + acres);
+                } else {
+                    counts.put(c.getCommodity(), acres);
+                }
+            }
+        }
+        return new RestData<>(counts);
+    }
+
+    @GetMapping("/commodityCardCount")
+    @ApiOperation(value = "Get the total number of occurences where each commodity exists among all open cards", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO getCardCommoditiesCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
+                                   @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
+
+        Iterable<Card> result = ranchRepository.findAllCommodityIds(ranchAccess.getRanchList(), false);
+        HashMap<String, Integer> counts = new HashMap<String, Integer>();
+        Iterator<Card> i = result.iterator();
+        while(i.hasNext()) {
+            for (Commodities c : i.next().getCommodities()) {
+                if (counts.containsKey(c.getCommodity())) {
+                    counts.put(c.getCommodity(), counts.get(c.getCommodity()) + 1);
+                } else {
+                    counts.put(c.getCommodity(), 0);
+                }
+            }
+        }
+        return new RestData<>(counts);
+    }
+
+    @GetMapping("/count")
+    @ApiOperation(value = "Get a count of all permitted cards in the database.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO getCardCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
+                                   @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
+        RestDTO result = new RestFailure("You requested no cards, or don't have permission to access the requested cards.");
+
+        if (openCards && closedCards) {
+            result = new RestData<>(ranchRepository.countAllByRanchNameIsIn(ranchAccess.getRanchList()));
+        } else if (openCards) {
+            result = new RestData<>(ranchRepository.countAllByRanchNameIsIn(ranchAccess.getRanchList(), false));
+        } else if (closedCards) {
+            result = new RestData<>(ranchRepository.countAllByRanchNameIsIn(ranchAccess.getRanchList(), true));
+        } else {
+            result = new RestFailure("You requested no cards.");
+        }
+        return result;
+    }
+
+    @GetMapping("/ranches")
+    @ApiOperation(value = "Get all cards the user is allowed access to view.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO getAllRanchData() {
+        Sort sortByRanchName = Sort.by(Sort.Order.asc("fieldID"), Sort.Order.desc("lastUpdated"));
+        return new RestData<>(ranchRepository.findAllByIsClosedFalseAndRanchNameIsIn(ranchAccess.getRanchList(), sortByRanchName));
+    }
+
     @PostMapping("/ranches")
     @ApiOperation(value = "Create a new card.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO createRanchData(@Valid @RequestBody Card card) {
@@ -49,13 +127,6 @@ public class CardEntryController {
         } else return new RestFailure("You don't have permission to create a card.");
     }
 
-    @GetMapping("/ranches")
-    @ApiOperation(value = "Get all cards the user is allowed access to view.", authorizations = {@Authorization(value = "Bearer")})
-    public RestDTO getAllRanchData() {
-        Sort sortByRanchName = Sort.by(Sort.Order.asc("fieldID"), Sort.Order.desc("lastUpdated"));
-        return new RestData<>(ranchRepository.findAllByIsClosedFalseAndRanchNameIsIn(ranchAccess.getRanchList(), sortByRanchName));
-    }
-
     @GetMapping("/ranches/{id}")
     @ApiOperation(value = "Get a specific card by its ID.", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO getRanchData(@PathVariable("id") String id) {
@@ -63,40 +134,6 @@ public class CardEntryController {
 
         if (ranchAccess.cardExistsAndViewAllowed(card)) return new RestData<>(card.get());
         else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
-    }
-
-    @PostMapping("/ranches/{id}/tractor")
-    @ApiOperation(value = "Add tractor data to a card.", authorizations = {@Authorization(value = "Bearer")})
-    public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody Tractor data) {
-        Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
-            if (ranchAccess.cardExistsAndViewAllowed(card)) {
-                try {
-                    card.get().addTractor(data);
-                } catch (LimitExceededException e) {
-                    return new RestFailure(e.getMessage());
-                }
-                card.get().setLastUpdated();
-                ranchRepository.save(card.get());
-                return new RestSuccess();
-            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
-        } else return new RestFailure("You don't have permission to add tractor data to this card.");
-    }
-
-    @PostMapping("/ranches/{id}/irrigation")
-    @ApiOperation(value = "Add Irrigation data to a card.", authorizations = {@Authorization(value = "Bearer")})
-    public RestDTO addIrrigationData(@PathVariable("id") String id, @RequestBody Irrigation data) {
-        Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.cardExistsAndViewAllowed(card)) {
-            try {
-                card.get().addIrrigation(data);
-            } catch (LimitExceededException e) {
-                return new RestFailure(e.getMessage());
-            }
-            card.get().setLastUpdated();
-            ranchRepository.save(card.get());
-            return new RestSuccess();
-        } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
     }
 
     @PostMapping("/ranches/{id}/chemical")
@@ -117,6 +154,37 @@ public class CardEntryController {
         } else return new RestFailure("You don't have permission to add chemical data to this card.");
     }
 
+    @PutMapping("/ranches/{id}/close")
+    @ApiOperation(value = "Close card when completed.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO closeCard(@PathVariable("id") String id, @RequestBody Card ranch) {
+        Optional<Card> card = ranchRepository.findById(id);
+        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
+            if (ranchAccess.cardExistsAndViewAllowed(card)) {
+                card.get().setHarvestDate(ranch.getHarvestDate());
+                card.get().setClosed(true);
+                card.get().setLastUpdated();
+                ranchRepository.save(card.get());
+                return new RestSuccess();
+            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        } else return new RestFailure("You don't have permission to close this card.");
+    }
+
+    @PostMapping("/ranches/{id}/irrigation")
+    @ApiOperation(value = "Add Irrigation data to a card.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO addIrrigationData(@PathVariable("id") String id, @RequestBody Irrigation data) {
+        Optional<Card> card = ranchRepository.findById(id);
+        if (ranchAccess.cardExistsAndViewAllowed(card)) {
+            try {
+                card.get().addIrrigation(data);
+            } catch (LimitExceededException e) {
+                return new RestFailure(e.getMessage());
+            }
+            card.get().setLastUpdated();
+            ranchRepository.save(card.get());
+            return new RestSuccess();
+        } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+    }
+
     @PutMapping("/ranches/{id}/setComments")
     @ApiOperation(value = "Sets a card comments", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO setComments(@PathVariable("id") String id, @Valid @RequestBody List<Comment> comments) {
@@ -128,6 +196,24 @@ public class CardEntryController {
                   return new RestSuccess();
               });
               return data.orElse(new RestFailure("Card ID not found."));
+    }
+
+    @PostMapping("/ranches/{id}/tractor")
+    @ApiOperation(value = "Add tractor data to a card.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO addTractorData(@PathVariable("id") String id, @RequestBody Tractor data) {
+        Optional<Card> card = ranchRepository.findById(id);
+        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
+            if (ranchAccess.cardExistsAndViewAllowed(card)) {
+                try {
+                    card.get().addTractor(data);
+                } catch (LimitExceededException e) {
+                    return new RestFailure(e.getMessage());
+                }
+                card.get().setLastUpdated();
+                ranchRepository.save(card.get());
+                return new RestSuccess();
+            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
+        } else return new RestFailure("You don't have permission to add tractor data to this card.");
     }
 
     @PostMapping("/ranches/{id}/wet.thin.hoe")
@@ -147,18 +233,55 @@ public class CardEntryController {
         } else return new RestFailure("You don't have permission to set the wet, thin, or hoe date on this card.");
     }
 
-    @PutMapping("/ranches/{id}/close")
-    @ApiOperation(value = "Close card when completed.", authorizations = {@Authorization(value = "Bearer")})
-    public RestDTO closeCard(@PathVariable("id") String id, @RequestBody Card ranch) {
-        Optional<Card> card = ranchRepository.findById(id);
-        if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
-            if (ranchAccess.cardExistsAndViewAllowed(card)) {
-                card.get().setHarvestDate(ranch.getHarvestDate());
-                card.get().setClosed(true);
-                card.get().setLastUpdated();
-                ranchRepository.save(card.get());
-                return new RestSuccess();
-            } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
-        } else return new RestFailure("You don't have permission to close this card.");
+    @PostMapping("/ranchesFiltered")
+    @ApiOperation(value = "Get all cards from the database, according to provided filter.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO getAllRanchDataFiltered(@Valid @RequestBody DbFilter filter) {
+        // Set defualt sort method
+        Sort sort = Sort.by(Sort.Order.desc("lastUpdated"));
+        // Use mongo sorting for provided filter if applicable
+        if (!filter.getSort().equals("commodities")) {
+            if (filter.getOrder().equals("asc")) {
+                sort = Sort.by(Sort.Order.asc(filter.getSort()));
+            } else {
+                sort = Sort.by(Sort.Order.desc(filter.getSort()));
+            }
+        }
+        // Build new ranch list which finds intersection between queried ranches and permitted ranches
+        List<String> permitted = ranchAccess.getRanchList();
+        ArrayList<String> ranches = new ArrayList<String>();
+        for (int i = 0; i < permitted.size(); i++) {
+            if (filter.getRanches().contains(permitted.get(i))) {
+                ranches.add(permitted.get(i));
+            }
+        }
+        // Get iterable over database cards sorted with given ranchlist
+        Iterable<Card> cards = ranchRepository.findAllByIsClosedFalseAndRanchNameIsIn(ranches, sort);
+        // Perform filter operation and return response
+        return new RestData<DbFilterResponse>(filter.filter(cards));
+    }
+
+    @GetMapping("/recentlyHarvestedCount")
+    @ApiOperation(value = "Get count of cards harvested in last 6 months", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO getRecentlyHarvestedCount() {
+        Calendar c = Calendar.getInstance();
+        List<Integer> counts = Arrays.asList(0, 0, 0, 0, 0, 0);
+        Date current = new Date();
+        c.setTime(current);
+        int currentMonth = c.get(Calendar.MONTH);
+        // Set start day 5 months prior on the first of the month (Do not include the 6th month back)
+        c.add(Calendar.MONTH, -5);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        Date start = c.getTime();
+        Iterable<Card> recent = ranchRepository.findAllHarvestedBetween(start, current);
+        Iterator<Card> i = recent.iterator();
+        while(i.hasNext()) {
+            Date temp = i.next().getHarvestDate();
+            if (temp != null) {
+                c.setTime(temp);
+                int index = 5 - (((currentMonth + 12) - c.get(Calendar.MONTH)) % 12);
+                counts.set(index, counts.get(index)+1);
+            }
+        }
+        return new RestData<>(counts);
     }
 }

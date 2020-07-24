@@ -69,15 +69,13 @@ public class CardEditController {
         } else return new RestFailure("Card ID not found, or you don't have permission to access this card.");
     }
 
-    @PutMapping("/ranches/{id}/state")
-    @ApiOperation(value = "Toggle the state of a card between closed/open.", authorizations = {@Authorization(value = "Bearer")})
-    public RestDTO setRanchDataState(@PathVariable("id") String id, @RequestParam Boolean closed) {
+    @DeleteMapping("/ranches/{id}")
+    @ApiOperation(value = "Delete a card.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO deleteRanchData(@PathVariable("id") String id){
         if (ranchAccess.hasRole(PLRole.DATA_EDIT) || ranchAccess.hasRole(PLRole.CONTRACTOR_EDIT)) {
             Optional<RestDTO> data = ranchRepository.findById(id)
-                  .map(card -> {
-                      card.setLastUpdated();
-                      card.setClosed(closed);
-                      ranchRepository.save(card);
+                  .map(ranch -> {
+                      ranchRepository.deleteById(id);
                       return new RestSuccess();
                   });
             return data.orElse(new RestFailure("Card ID not found."));
@@ -100,13 +98,15 @@ public class CardEditController {
         } else return new RestFailure("Card ID not found, or you don't have permission to perform this action.");
     }
 
-    @DeleteMapping("/ranches/{id}")
-    @ApiOperation(value = "Delete a card.", authorizations = {@Authorization(value = "Bearer")})
-    public RestDTO deleteRanchData(@PathVariable("id") String id){
+    @PutMapping("/ranches/{id}/state")
+    @ApiOperation(value = "Toggle the state of a card between closed/open.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO setRanchDataState(@PathVariable("id") String id, @RequestParam Boolean closed) {
         if (ranchAccess.hasRole(PLRole.DATA_EDIT) || ranchAccess.hasRole(PLRole.CONTRACTOR_EDIT)) {
             Optional<RestDTO> data = ranchRepository.findById(id)
-                  .map(ranch -> {
-                      ranchRepository.deleteById(id);
+                  .map(card -> {
+                      card.setLastUpdated();
+                      card.setClosed(closed);
+                      ranchRepository.save(card);
                       return new RestSuccess();
                   });
             return data.orElse(new RestFailure("Card ID not found."));
