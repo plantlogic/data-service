@@ -40,6 +40,9 @@ public class CommonInitService {
         if (!commonRepository.existsById("shippers")) {
             commonRepository.saveAll((new CommonInitBuilder()).shippers().build());
         }
+        if (!commonRepository.existsById("thinHoeCrew")) {
+            commonRepository.saveAll((new CommonInitBuilder()).thinHoeCrew().build());
+        }
         if (!commonRepository.existsById("tractorOperators")) {
             commonRepository.saveAll((new CommonInitBuilder()).tractorOperators().build());
         }

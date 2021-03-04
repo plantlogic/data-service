@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface RanchRepository extends MongoRepository<Card, String>{
+    List<Card> findAll();
     List<Card> findByRanchName(String ranchName);
     List<Card> findByRanchManagerName(String ranchManagerName);
     Iterable<Card> findAllByIsClosedTrue(Sort sort);
