@@ -89,6 +89,8 @@ public class ExportPresetController {
                 preset.get().setTractorEntry(updatedPreset.getTractorEntry());
                 preset.get().setTractorEntryFertilizers(updatedPreset.getTractorEntryFertilizers());
                 preset.get().setTractorEntryChemicals(updatedPreset.getTractorEntryChemicals());
+                preset.get().setHoeCrews(updatedPreset.getHoeCrews());
+                preset.get().setThinCrews(updatedPreset.getThinCrews());
                 exportPresetRepository.save(preset.get());
                 return new RestSuccess();
             } else {

@@ -55,6 +55,11 @@ public class CommonInitBuilder {
         common.add(list);
         return this;
     }
+    public CommonInitBuilder thinHoeCrew() {
+        CommonData<List<CommonDataValue<HashMap<String, HashMap<String, Object>>>>> list = new CommonData<>("thinHoeCrew", new ArrayList<>());
+        common.add(list);
+        return this;
+    }
     public CommonInitBuilder tractorOperators() {
         CommonData<List<CommonDataValue<String>>> list = new CommonData<>("tractorOperators", new ArrayList<>());
         common.add(list);

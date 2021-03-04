@@ -216,16 +216,13 @@ public class CardEntryController {
         } else return new RestFailure("You don't have permission to add tractor data to this card.");
     }
 
-    @PostMapping("/ranches/{id}/wet.thin.hoe")
-    @ApiOperation(value = "Set the wet, thin, and hoe dates of a card.", authorizations = {@Authorization(value = "Bearer")})
-    public RestDTO addWetThinHoeData(@PathVariable("id") String id, @RequestBody Card data) {
+    @PostMapping("/ranches/{id}/wetDate")
+    @ApiOperation(value = "Set the wet date of a card.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO addWetDate(@PathVariable("id") String id, @RequestBody Date wetDate) {
         Optional<Card> card = ranchRepository.findById(id);
         if (ranchAccess.hasRole(PLRole.DATA_ENTRY) || ranchAccess.hasRole(PLRole.DATA_VIEW)) {
             if (ranchAccess.cardExistsAndViewAllowed(card)) {
-                card.get().setWetDate(data.getWetDate());
-                card.get().setThinDate(data.getThinDate());
-                card.get().setHoeDate(data.getHoeDate());
-    
+                card.get().setWetDate(wetDate);    
                 card.get().setLastUpdated();
                 ranchRepository.save(card.get());
                 return new RestSuccess();

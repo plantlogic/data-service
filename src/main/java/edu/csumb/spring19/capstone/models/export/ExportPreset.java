@@ -36,6 +36,8 @@ public class ExportPreset {
     private List<ExportPresetListEntry> tractorEntryChemicals;
     private List<ExportPresetListEntry> preChemicalsFertilizer;
     private List<ExportPresetListEntry> preChemicalsChemical;
+    private List<ExportPresetListEntry> thinCrews;
+    private List<ExportPresetListEntry> hoeCrews;
 
     public String getId() {
         return id;
@@ -99,6 +101,22 @@ public class ExportPreset {
 
     public void setCommodities(List<ExportPresetListEntry> commodities) {
         this.commodities = commodities;
+    }
+
+    public List<ExportPresetListEntry> getThinCrews() {
+        return thinCrews;
+    }
+
+    public void setThinCrews(List<ExportPresetListEntry> thinCrews) {
+        this.thinCrews = thinCrews;
+    }
+
+    public List<ExportPresetListEntry> getHoeCrews() {
+        return hoeCrews;
+    }
+
+    public void setHoeCrews(List<ExportPresetListEntry> hoeCrews) {
+        this.hoeCrews = hoeCrews;
     }
 
     public List<ExportPresetListEntry> getPreChemicals() {

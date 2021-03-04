@@ -6,6 +6,7 @@ import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.authentication.PLRole;
 import edu.csumb.spring19.capstone.models.card.Card;
 import edu.csumb.spring19.capstone.models.card.Comment;
+import edu.csumb.spring19.capstone.models.card.ThinHoeCrew;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import edu.csumb.spring19.capstone.security.RanchAccess;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.LimitExceededException;
 import javax.validation.Valid;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +31,61 @@ public class CardEditController {
 
     @Autowired
     private RanchAccess ranchAccess;
+
+    @PutMapping("/updateCardsToThinHoeCrews")
+    @ApiOperation(value = "Modify all cards in database to have Thin & Hoe Crews sections, replacing old thin & hoe data", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO updateCardsToThinHoeCrews() {
+        if (ranchAccess.hasRole(PLRole.DATA_EDIT) && ranchAccess.hasRole(PLRole.APP_ADMIN)) {
+            List<Card> cardList = ranchRepository.findAll();
+            Iterator<Card> i = cardList.iterator();
+            Integer numErrors = 0;
+            Card temp;
+            String machineTypeCrew = "machinelegacy";
+            String handTypeCrew = "handlegacy";
+            while (i.hasNext()) {
+                temp = i.next();
+                if (temp.getThinDate() != null) {
+                    ThinHoeCrew thinEntry = new ThinHoeCrew();
+                    thinEntry.setDate(temp.getThinDate());
+                    thinEntry.setHoursWorked(0);
+                    thinEntry.setNumEmployees(0);
+                    if (temp.getThinTypeString( )== "Hand") {
+                        thinEntry.setCrew(handTypeCrew);
+                    } else {
+                        thinEntry.setCrew(machineTypeCrew);
+                    }
+                    try {
+                        temp.addThinCrew(thinEntry);
+                    } catch (LimitExceededException e) {
+                        numErrors++;
+                    }
+                }
+                temp.setThinDate(null);
+                temp.setThinType(null);
+                if (temp.getHoeDate() != null) {
+                    ThinHoeCrew hoeEntry = new ThinHoeCrew();
+                    hoeEntry.setDate(temp.getHoeDate());
+                    hoeEntry.setHoursWorked(0);
+                    hoeEntry.setNumEmployees(0);
+                    if (temp.getHoeTypeString() == "Hand") {
+                        hoeEntry.setCrew(handTypeCrew);
+                    } else {
+                        hoeEntry.setCrew(machineTypeCrew);
+                    }
+                    try {
+                        temp.addHoeCrew(hoeEntry);
+                    } catch (LimitExceededException e) {
+                        numErrors++;
+                    }
+                }
+                temp.setHoeDate(null);
+                temp.setHoeType(null);
+                ranchRepository.save(temp);
+            }
+            System.out.println("Cards were updated, " + numErrors + " error(s) occured");
+            return new RestSuccess();
+        } else return new RestFailure("Failed to update all cards");
+    }
 
     @PutMapping("/ranches/{id}")
     @ApiOperation(value = "Overwrite a card by it's ID.", authorizations = {@Authorization(value = "Bearer")})
@@ -49,6 +107,8 @@ public class CardEditController {
                 card.get().setCommodities(ranch.getCommodities());
                 card.get().setPreChemicals(ranch.getPreChemicals());
                 card.get().setPostChemicals(ranch.getPostChemicals());
+                card.get().setThinCrews(ranch.getThinCrews());
+                card.get().setHoeCrews(ranch.getHoeCrews());
             } catch (LimitExceededException e) {
                 return new RestFailure(e.getMessage());
             }
@@ -91,6 +151,44 @@ public class CardEditController {
                   .map(card -> {
                       card.setLastUpdated();
                       card.setComments(comments);
+                      ranchRepository.save(card);
+                      return new RestSuccess();
+                  });
+            return data.orElse(new RestFailure("Card ID not found."));
+        } else return new RestFailure("Card ID not found, or you don't have permission to perform this action.");
+    }
+
+    @PutMapping("/ranches/{id}/setThinning")
+    @ApiOperation(value = "Set the card's thinning entries", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO setThinning(@PathVariable("id") String id, @Valid @RequestBody List<ThinHoeCrew> thinCrews) {
+        if (ranchAccess.hasRole(PLRole.TH_EDIT)) {
+            Optional<RestDTO> data = ranchRepository.findById(id)
+                  .map(card -> {
+                      card.setLastUpdated();
+                        try {
+                            card.setThinCrews(thinCrews);
+                        } catch (LimitExceededException e) {
+                            return new RestFailure("Max number of thinning entries has been exceeded.");
+                        }
+                      ranchRepository.save(card);
+                      return new RestSuccess();
+                  });
+            return data.orElse(new RestFailure("Card ID not found."));
+        } else return new RestFailure("Card ID not found, or you don't have permission to perform this action.");
+    }
+
+    @PutMapping("/ranches/{id}/setHoeing")
+    @ApiOperation(value = "Set the card's hoeing entries", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO setHoeing(@PathVariable("id") String id, @Valid @RequestBody List<ThinHoeCrew> hoeCrews) {
+        if (ranchAccess.hasRole(PLRole.TH_EDIT)) {
+            Optional<RestDTO> data = ranchRepository.findById(id)
+                  .map(card -> {
+                      card.setLastUpdated();
+                        try {
+                            card.setHoeCrews(hoeCrews);
+                        } catch (LimitExceededException e) {
+                            return new RestFailure("Max number of hoeing entries has been exceeded.");
+                        }
                       ranchRepository.save(card);
                       return new RestSuccess();
                   });

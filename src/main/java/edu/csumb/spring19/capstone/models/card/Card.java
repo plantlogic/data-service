@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.naming.LimitExceededException;
 import javax.validation.constraints.NotEmpty;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +46,9 @@ public class Card {
 
     private WorkType thinType;
     private WorkType hoeType;
+
+    private List<ThinHoeCrew> thinCrews;
+    private List<ThinHoeCrew> hoeCrews;
 
     private Integer cropYear = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -235,6 +240,44 @@ public class Card {
         this.hoeDate = hoeDate;
     }
 
+    public List<ThinHoeCrew> getThinCrews() {
+        return thinCrews;
+    }
+
+    public void setThinCrews(List<ThinHoeCrew> thinCrews) throws LimitExceededException {
+        if (thinCrews.size() > 1)
+            throw new LimitExceededException("Only 1 Thin Crew entry is allowed per card.");
+        this.thinCrews = thinCrews;
+    }
+
+    public void addThinCrew(ThinHoeCrew thinCrew) throws LimitExceededException {
+        if (this.thinCrews == null) {
+            this.thinCrews = new ArrayList<ThinHoeCrew>();
+        }
+        if (this.thinCrews.size() >= 1)
+            throw new LimitExceededException("Only 1 Thin Crew entry is allowed per card.");
+        this.thinCrews.add(thinCrew);
+    }
+
+    public List<ThinHoeCrew> getHoeCrews() {
+        return hoeCrews;
+    }
+
+    public void setHoeCrews(List<ThinHoeCrew> hoeCrews) throws LimitExceededException {
+        if (hoeCrews.size() > 3)
+            throw new LimitExceededException("Only 3 Hoe Crew entries are allowed per card.");
+        this.hoeCrews = hoeCrews;
+    }
+
+    public void addHoeCrew(ThinHoeCrew hoeCrew) throws LimitExceededException {
+        if (this.hoeCrews == null) {
+            this.hoeCrews = new ArrayList<ThinHoeCrew>();
+        }
+        if (this.hoeCrews.size() >= 3)
+            throw new LimitExceededException("Only 3 Hoe Crew entries are allowed per card.");
+        this.hoeCrews.add(hoeCrew);
+    }
+
     public Date getHarvestDate() {
         return harvestDate;
     }
@@ -255,6 +298,14 @@ public class Card {
         return thinType;
     }
 
+    public String getThinTypeString() {
+        if (this.thinType != null) {
+            return thinType.toString();
+        } else {
+            return "";
+        }
+    }
+
     public void setThinType(WorkType thinType) {
         this.thinType = thinType;
     }
@@ -265,6 +316,14 @@ public class Card {
 
     public void setHoeType(WorkType hoeType) {
         this.hoeType = hoeType;
+    }
+
+    public String getHoeTypeString() {
+        if (this.hoeType != null) {
+            return hoeType.toString();
+        } else {
+            return "";
+        }
     }
 }
 enum WorkType {

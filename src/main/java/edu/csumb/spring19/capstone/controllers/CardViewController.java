@@ -32,7 +32,7 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/view")
-@PreAuthorize("hasAnyRole('DATA_VIEW', 'CONTRACTOR_VIEW', 'SHIPPER')")
+@PreAuthorize("hasAnyRole('DATA_VIEW', 'CONTRACTOR_VIEW', 'SHIPPER', 'TH_VIEW')")
 public class CardViewController {
     @Autowired
     private RanchRepository ranchRepository;
@@ -195,7 +195,7 @@ public class CardViewController {
         if (!card.isPresent()) {
             return new RestFailure("Card not found with id " + id );
         } else {
-            PLRole[] roles = {PLRole.DATA_VIEW, PLRole.CONTRACTOR_VIEW, PLRole.SHIPPER};
+            PLRole[] roles = {PLRole.DATA_VIEW, PLRole.CONTRACTOR_VIEW, PLRole.SHIPPER, PLRole.TH_VIEW};
             // LIMIT DATA SENT IF SHIPPER
             if (ranchAccess.cardExistsAndHasAnyPermissions(roles, true, card)) {
                 return new RestData<>(card.get());
@@ -232,6 +232,33 @@ public class CardViewController {
         }
         // Get iterable over database cards sorted with given ranchlist
         Iterable<Card> cards = ranchRepository.findAllByRanchNameIsIn(ranches, sort);
+        // Perform filter operation and return response
+        return new RestData<DbFilterResponse>(filter.filter(cards));
+    }
+
+    @PostMapping("/ranchesFilteredTH")
+    @ApiOperation(value = "Get all cards from the database, according to provided filter, for the Thin & Hoe Page.", authorizations = {@Authorization(value = "Bearer")})
+    public RestDTO getAllRanchDataFilteredTH(@Valid @RequestBody DbFilter filter) {
+        // Set defualt sort method
+        Sort sort = Sort.by(Sort.Order.desc("lastUpdated"));
+        // Use mongo sorting for provided filter if applicable
+        if (!filter.getSort().equals("commodities")) {
+            if (filter.getOrder().equals("asc")) {
+                sort = Sort.by(Sort.Order.asc(filter.getSort()));
+            } else {
+                sort = Sort.by(Sort.Order.desc(filter.getSort()));
+            }
+        }
+        // Build new ranch list which finds intersection between queried ranches and permitted ranches
+        List<String> permitted = ranchAccess.getRanchList();
+        ArrayList<String> ranches = new ArrayList<String>();
+        for (int i = 0; i < permitted.size(); i++) {
+            if (filter.getRanches().contains(permitted.get(i))) {
+                ranches.add(permitted.get(i));
+            }
+        }
+        // Get iterable over database cards sorted with given ranchlist
+        Iterable<Card> cards = ranchRepository.findAllByIsClosedFalseAndRanchNameIsIn(ranches, sort);
         // Perform filter operation and return response
         return new RestData<DbFilterResponse>(filter.filter(cards));
     }
