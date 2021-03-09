@@ -47,7 +47,7 @@ public class CardEditController {
                 if (temp.getThinDate() != null) {
                     ThinHoeCrew thinEntry = new ThinHoeCrew();
                     thinEntry.setDate(temp.getThinDate());
-                    thinEntry.setHoursWorked(0);
+                    thinEntry.setHoursWorked(0f);
                     thinEntry.setNumEmployees(0);
                     if (temp.getThinTypeString( )== "Hand") {
                         thinEntry.setCrew(handTypeCrew);
@@ -65,7 +65,7 @@ public class CardEditController {
                 if (temp.getHoeDate() != null) {
                     ThinHoeCrew hoeEntry = new ThinHoeCrew();
                     hoeEntry.setDate(temp.getHoeDate());
-                    hoeEntry.setHoursWorked(0);
+                    hoeEntry.setHoursWorked(0f);
                     hoeEntry.setNumEmployees(0);
                     if (temp.getHoeTypeString() == "Hand") {
                         hoeEntry.setCrew(handTypeCrew);

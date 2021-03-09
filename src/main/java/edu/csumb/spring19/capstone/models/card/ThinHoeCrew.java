@@ -11,7 +11,7 @@ public class ThinHoeCrew {
     private Date date = new Date();
     private String crew;
     private Integer numEmployees;
-    private Integer hoursWorked;
+    private Float hoursWorked;
     private String comment;
 
     public Date getDate() {
@@ -38,11 +38,11 @@ public class ThinHoeCrew {
         this.numEmployees = numEmployees;
     }
 
-    public Integer getHoursWorked() {
+    public Float getHoursWorked() {
         return hoursWorked;
     }
 
-    public void setHoursWorked(Integer hoursWorked) {
+    public void setHoursWorked(Float hoursWorked) {
         this.hoursWorked = hoursWorked;
     }
 
