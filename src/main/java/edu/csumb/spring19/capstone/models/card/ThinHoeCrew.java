@@ -13,6 +13,7 @@ public class ThinHoeCrew {
     private Integer numEmployees;
     private Float hoursWorked;
     private String comment;
+    private Boolean rehoe = false;
 
     public Date getDate() {
         return date;
@@ -52,5 +53,13 @@ public class ThinHoeCrew {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Boolean getRehoe() {
+        return rehoe;
+    }
+
+    public void setRehoe(Boolean rehoe) {
+        this.rehoe = rehoe;
     }
 }

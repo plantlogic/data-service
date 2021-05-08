@@ -35,56 +35,57 @@ public class CardEditController {
     @PutMapping("/updateCardsToThinHoeCrews")
     @ApiOperation(value = "Modify all cards in database to have Thin & Hoe Crews sections, replacing old thin & hoe data", authorizations = {@Authorization(value = "Bearer")})
     public RestDTO updateCardsToThinHoeCrews() {
-        if (ranchAccess.hasRole(PLRole.DATA_EDIT) && ranchAccess.hasRole(PLRole.APP_ADMIN)) {
-            List<Card> cardList = ranchRepository.findAll();
-            Iterator<Card> i = cardList.iterator();
-            Integer numErrors = 0;
-            Card temp;
-            String machineTypeCrew = "machinelegacy";
-            String handTypeCrew = "handlegacy";
-            while (i.hasNext()) {
-                temp = i.next();
-                if (temp.getThinDate() != null) {
-                    ThinHoeCrew thinEntry = new ThinHoeCrew();
-                    thinEntry.setDate(temp.getThinDate());
-                    thinEntry.setHoursWorked(0f);
-                    thinEntry.setNumEmployees(0);
-                    if (temp.getThinTypeString( )== "Hand") {
-                        thinEntry.setCrew(handTypeCrew);
-                    } else {
-                        thinEntry.setCrew(machineTypeCrew);
-                    }
-                    try {
-                        temp.addThinCrew(thinEntry);
-                    } catch (LimitExceededException e) {
-                        numErrors++;
-                    }
-                }
-                temp.setThinDate(null);
-                temp.setThinType(null);
-                if (temp.getHoeDate() != null) {
-                    ThinHoeCrew hoeEntry = new ThinHoeCrew();
-                    hoeEntry.setDate(temp.getHoeDate());
-                    hoeEntry.setHoursWorked(0f);
-                    hoeEntry.setNumEmployees(0);
-                    if (temp.getHoeTypeString() == "Hand") {
-                        hoeEntry.setCrew(handTypeCrew);
-                    } else {
-                        hoeEntry.setCrew(machineTypeCrew);
-                    }
-                    try {
-                        temp.addHoeCrew(hoeEntry);
-                    } catch (LimitExceededException e) {
-                        numErrors++;
-                    }
-                }
-                temp.setHoeDate(null);
-                temp.setHoeType(null);
-                ranchRepository.save(temp);
-            }
-            System.out.println("Cards were updated, " + numErrors + " error(s) occured");
-            return new RestSuccess();
-        } else return new RestFailure("Failed to update all cards");
+        return new RestFailure("This operation is currently disabled");
+        // if (ranchAccess.hasRole(PLRole.DATA_EDIT) && ranchAccess.hasRole(PLRole.APP_ADMIN)) {
+        //     List<Card> cardList = ranchRepository.findAll();
+        //     Iterator<Card> i = cardList.iterator();
+        //     Integer numErrors = 0;
+        //     Card temp;
+        //     String machineTypeCrew = "machinelegacy";
+        //     String handTypeCrew = "handlegacy";
+        //     while (i.hasNext()) {
+        //         temp = i.next();
+        //         if (temp.getThinDate() != null) {
+        //             ThinHoeCrew thinEntry = new ThinHoeCrew();
+        //             thinEntry.setDate(temp.getThinDate());
+        //             thinEntry.setHoursWorked(0f);
+        //             thinEntry.setNumEmployees(0);
+        //             if (temp.getThinTypeString( )== "Hand") {
+        //                 thinEntry.setCrew(handTypeCrew);
+        //             } else {
+        //                 thinEntry.setCrew(machineTypeCrew);
+        //             }
+        //             try {
+        //                 temp.addThinCrew(thinEntry);
+        //             } catch (LimitExceededException e) {
+        //                 numErrors++;
+        //             }
+        //         }
+        //         temp.setThinDate(null);
+        //         temp.setThinType(null);
+        //         if (temp.getHoeDate() != null) {
+        //             ThinHoeCrew hoeEntry = new ThinHoeCrew();
+        //             hoeEntry.setDate(temp.getHoeDate());
+        //             hoeEntry.setHoursWorked(0f);
+        //             hoeEntry.setNumEmployees(0);
+        //             if (temp.getHoeTypeString() == "Hand") {
+        //                 hoeEntry.setCrew(handTypeCrew);
+        //             } else {
+        //                 hoeEntry.setCrew(machineTypeCrew);
+        //             }
+        //             try {
+        //                 temp.addHoeCrew(hoeEntry);
+        //             } catch (LimitExceededException e) {
+        //                 numErrors++;
+        //             }
+        //         }
+        //         temp.setHoeDate(null);
+        //         temp.setHoeType(null);
+        //         ranchRepository.save(temp);
+        //     }
+        //     System.out.println("Cards were updated, " + numErrors + " error(s) occured");
+        //     return new RestSuccess();
+        // } else return new RestFailure("Failed to update all cards");
     }
 
     @PutMapping("/ranches/{id}")
