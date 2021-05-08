@@ -17,6 +17,8 @@ import java.util.List;
 public class Card {
     private static final Integer MAX_LIST_SIZE_BIG = 12;
     private static final Integer MAX_LIST_SIZE_SMALL = 3;
+    private static final Integer thinCrewsMax = 3;
+    private static final Integer hoeCrewsMax = 6;
 
     @Id
     private String id;
@@ -245,8 +247,8 @@ public class Card {
     }
 
     public void setThinCrews(List<ThinHoeCrew> thinCrews) throws LimitExceededException {
-        if (thinCrews.size() > 1)
-            throw new LimitExceededException("Only 1 Thin Crew entry is allowed per card.");
+        if (thinCrews.size() > thinCrewsMax)
+            throw new LimitExceededException("Only " + thinCrewsMax + " Thin Crew entries are allowed per card.");
         this.thinCrews = thinCrews;
     }
 
@@ -254,8 +256,8 @@ public class Card {
         if (this.thinCrews == null) {
             this.thinCrews = new ArrayList<ThinHoeCrew>();
         }
-        if (this.thinCrews.size() >= 1)
-            throw new LimitExceededException("Only 1 Thin Crew entry is allowed per card.");
+        if (this.thinCrews.size() >= thinCrewsMax)
+            throw new LimitExceededException("Only " + thinCrewsMax + " Thin Crew entries are allowed per card.");
         this.thinCrews.add(thinCrew);
     }
 
@@ -264,8 +266,8 @@ public class Card {
     }
 
     public void setHoeCrews(List<ThinHoeCrew> hoeCrews) throws LimitExceededException {
-        if (hoeCrews.size() > 3)
-            throw new LimitExceededException("Only 3 Hoe Crew entries are allowed per card.");
+        if (hoeCrews.size() > hoeCrewsMax)
+            throw new LimitExceededException("Only " + hoeCrewsMax + " Hoe Crew entries are allowed per card.");
         this.hoeCrews = hoeCrews;
     }
 
@@ -273,8 +275,8 @@ public class Card {
         if (this.hoeCrews == null) {
             this.hoeCrews = new ArrayList<ThinHoeCrew>();
         }
-        if (this.hoeCrews.size() >= 3)
-            throw new LimitExceededException("Only 3 Hoe Crew entries are allowed per card.");
+        if (this.hoeCrews.size() >= hoeCrewsMax)
+            throw new LimitExceededException("Only " + hoeCrewsMax + " Hoe Crew entries are allowed per card.");
         this.hoeCrews.add(hoeCrew);
     }
 
