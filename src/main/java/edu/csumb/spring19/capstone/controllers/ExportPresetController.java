@@ -8,8 +8,8 @@ import edu.csumb.spring19.capstone.models.authentication.PLRole;
 import edu.csumb.spring19.capstone.models.export.ExportPreset;
 import edu.csumb.spring19.capstone.repos.ExportPresetRepository;
 import edu.csumb.spring19.capstone.security.RanchAccess;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-// import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -40,7 +39,7 @@ public class ExportPresetController {
     private RanchAccess ranchAccess;
 
     @PostMapping("/add")
-    @ApiOperation(value = "Create a new export preset.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Create a new export preset.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO createExportPreset(@Valid @RequestBody ExportPreset preset) {
         if (ranchAccess.hasRole(PLRole.APP_ADMIN)) {
             if (Optional.of(preset).isPresent()) {
@@ -56,7 +55,7 @@ public class ExportPresetController {
     }
 
     @GetMapping("/view/{id}")
-    @ApiOperation(value = "Get an export preset by its id from the database.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get an export preset by its id from the database.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getExportPreset(@PathVariable("id") String id) {
         Optional<ExportPreset> preset = exportPresetRepository.findById(id);
         if (preset.isPresent()) return new RestData<>(preset);
@@ -64,13 +63,13 @@ public class ExportPresetController {
     }
 
     @GetMapping("/view")
-    @ApiOperation(value = "Get all export presets from the database.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get all export presets from the database.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getAllExportPresets() {
         return new RestData<>(exportPresetRepository.findAll());
     }
 
     @PutMapping("/update/{id}")
-    @ApiOperation(value = "Overwrite an export preset by its id in the database.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Overwrite an export preset by its id in the database.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO updateExportPreset(@PathVariable("id") String id, @Valid @RequestBody ExportPreset updatedPreset) {
         Optional<ExportPreset> preset = exportPresetRepository.findById(id);
         if (ranchAccess.hasRole(PLRole.APP_ADMIN)) {
@@ -103,7 +102,7 @@ public class ExportPresetController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete a preset by its database id.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Delete a preset by its database id.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO deleteExportPreset(@PathVariable("id") String id){
         if (ranchAccess.hasRole(PLRole.APP_ADMIN)) {
             Optional<RestDTO> data = exportPresetRepository.findById(id)

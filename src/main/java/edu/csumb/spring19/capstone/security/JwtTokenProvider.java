@@ -29,7 +29,7 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().parseClaimsJwt(token).getBody().getSubject();
+        return Jwts.parserBuilder().build().parseClaimsJwt(token).getBody().getSubject();
     }
 
     public String getPassword(String token) {
@@ -38,7 +38,7 @@ public class JwtTokenProvider {
 
     public List<GrantedAuthority> getPermissions(String token) {
         String list = String.valueOf(
-              Jwts.parser().parseClaimsJwt(token).getBody().get("auth", LinkedHashMap.class).get("permissions")
+              Jwts.parserBuilder().build().parseClaimsJwt(token).getBody().get("auth", LinkedHashMap.class).get("permissions")
         );
 
         list = list.substring(1, list.length() - 1);

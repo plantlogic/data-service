@@ -10,8 +10,8 @@ import edu.csumb.spring19.capstone.models.dbfilter.DbFilter;
 import edu.csumb.spring19.capstone.models.dbfilter.DbFilterResponse;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import edu.csumb.spring19.capstone.security.RanchAccess;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -41,7 +41,7 @@ public class CardViewController {
     private RanchAccess ranchAccess;
 
     @GetMapping("/commodityAcreCount")
-    @ApiOperation(value = "Get the total number of acres covered by each commodity among all open cards", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get the total number of acres covered by each commodity among all open cards", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getCommoditiesAcreCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
                                        
@@ -65,8 +65,8 @@ public class CardViewController {
     }
 
     @GetMapping("/commodityAcreCount/{shipperId}")
-    @ApiOperation(value = "Get the total number of acres covered by each commodity among all open cards with matching shipperId",
-                  authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get the total number of acres covered by each commodity among all open cards with matching shipperId",
+                  security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getShipperCommoditiesAcreCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards,
                                    @PathVariable("shipperId") String shipperId) {
@@ -91,7 +91,7 @@ public class CardViewController {
     }
 
     @GetMapping("/commodityCardCount")
-    @ApiOperation(value = "Get the total number of occurences where each commodity exists among all open cards", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get the total number of occurences where each commodity exists among all open cards", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getCommoditiesCardCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
 
@@ -111,8 +111,8 @@ public class CardViewController {
     }
 
     @GetMapping("/commodityCardCount/{shipperId}")
-    @ApiOperation(value = "Get the total number of occurences where each commodity exists among all open cards with matching shipperId",
-                  authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get the total number of occurences where each commodity exists among all open cards with matching shipperId",
+                  security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getShipperCommoditiesCardCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards,
                                    @PathVariable("shipperId") String shipperId) {
@@ -133,7 +133,7 @@ public class CardViewController {
     }
 
     @GetMapping("/count")
-    @ApiOperation(value = "Get a count of all permitted cards in the database.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get a count of all permitted cards in the database.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getCardCount(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
         RestDTO result = new RestFailure("You requested no cards, or don't have permission to access the requested cards.");
@@ -151,7 +151,7 @@ public class CardViewController {
     }
 
     @GetMapping("/count/{shipperId}")
-    @ApiOperation(value = "Get a count of all permitted cards in the database.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get a count of all permitted cards in the database.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getCardCountByShipper(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards,
                                    @PathVariable("shipperId") String shipperId) {
@@ -170,7 +170,7 @@ public class CardViewController {
     }
 
     @GetMapping("/ranches")
-    @ApiOperation(value = "Get all cards from the database.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get all cards from the database.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getAllRanchData(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
         RestDTO result = new RestFailure("You requested no cards, or don't have permission to access the requested cards.");
@@ -189,7 +189,7 @@ public class CardViewController {
     }
 
     @GetMapping("/ranches/{id}")
-    @ApiOperation(value = "Get card from the database by its ID.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get card from the database by its ID.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getRanchData(@PathVariable("id") String id) {
         Optional<Card> card = ranchRepository.findById(id);
         if (!card.isPresent()) {
@@ -210,7 +210,7 @@ public class CardViewController {
     }
 
     @PostMapping("/ranchesFiltered")
-    @ApiOperation(value = "Get all cards from the database, according to provided filter.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get all cards from the database, according to provided filter.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getAllRanchDataFiltered(@Valid @RequestBody DbFilter filter) {
         // Set defualt sort method
         Sort sort = Sort.by(Sort.Order.desc("lastUpdated"));
@@ -237,7 +237,7 @@ public class CardViewController {
     }
 
     @PostMapping("/ranchesFilteredTH")
-    @ApiOperation(value = "Get all cards from the database, according to provided filter, for the Thin & Hoe Page.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get all cards from the database, according to provided filter, for the Thin & Hoe Page.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getAllRanchDataFilteredTH(@Valid @RequestBody DbFilter filter) {
         // Set defualt sort method
         Sort sort = Sort.by(Sort.Order.desc("lastUpdated"));
@@ -264,7 +264,7 @@ public class CardViewController {
     }
     
     @GetMapping("/recentlyHarvestedCount")
-    @ApiOperation(value = "Get count of cards harvested in last 6 months", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get count of cards harvested in last 6 months", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getRecentlyHarvestedCount() {
         Calendar c = Calendar.getInstance();
         List<Integer> counts = Arrays.asList(0, 0, 0, 0, 0, 0);
@@ -289,7 +289,7 @@ public class CardViewController {
     }
 
     @GetMapping("/recentlyHarvestedCount/{shipperId}")
-    @ApiOperation(value = "Get count of cards harvested in last 6 months", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get count of cards harvested in last 6 months", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getShipperRecentlyHarvestedCount(@PathVariable("shipperId") String shipperId) {
         Calendar c = Calendar.getInstance();
         List<Integer> counts = Arrays.asList(0, 0, 0, 0, 0, 0);
@@ -314,7 +314,7 @@ public class CardViewController {
     }
 
     @GetMapping("/shipperRanches/{shipperId}")
-    @ApiOperation(value = "Get all cards from the database which include the shipperID.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get all cards from the database which include the shipperID.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getShipperRanchData(@PathVariable("shipperId") String shipperId) {
         RestDTO result = new RestFailure("You requested no cards, or don't have permission to access the requested cards.");
         try {
@@ -327,7 +327,7 @@ public class CardViewController {
     }
 
     @PostMapping("/shipperRanchesFiltered/{shipperId}")
-    @ApiOperation(value = "Get all cards from the database containing the shipperID, according to provided filter.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get all cards from the database containing the shipperID, according to provided filter.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getAllShipperRanchDataFiltered(@Valid @RequestBody DbFilter filter, @PathVariable("shipperId") String shipperId) {
         // Set defualt sort method
         Sort sort = Sort.by(Sort.Order.desc("lastUpdated"));
@@ -346,7 +346,7 @@ public class CardViewController {
     }
 
     @GetMapping("/uniqueCommodityList")
-    @ApiOperation(value = "Get a list of all unique commodities", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get a list of all unique commodities", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getUniqueCommodities(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
         Iterable<Card> result;
@@ -374,7 +374,7 @@ public class CardViewController {
     }
 
     @GetMapping("/uniqueRanchList")
-    @ApiOperation(value = "Get a list of all unique ranches available", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get a list of all unique ranches available", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getUniqueRanchList(@RequestParam(defaultValue = "true", required = false) Boolean openCards,
                                    @RequestParam(defaultValue = "true", required = false) Boolean closedCards) {
         Iterable<Card> result;

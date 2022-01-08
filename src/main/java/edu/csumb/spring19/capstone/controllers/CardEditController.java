@@ -9,16 +9,15 @@ import edu.csumb.spring19.capstone.models.card.Comment;
 import edu.csumb.spring19.capstone.models.card.ThinHoeCrew;
 import edu.csumb.spring19.capstone.repos.RanchRepository;
 import edu.csumb.spring19.capstone.security.RanchAccess;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.LimitExceededException;
 import javax.validation.Valid;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,63 +32,13 @@ public class CardEditController {
     private RanchAccess ranchAccess;
 
     @PutMapping("/updateCardsToThinHoeCrews")
-    @ApiOperation(value = "Modify all cards in database to have Thin & Hoe Crews sections, replacing old thin & hoe data", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Modify all cards in database to have Thin & Hoe Crews sections, replacing old thin & hoe data", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO updateCardsToThinHoeCrews() {
         return new RestFailure("This operation is currently disabled");
-        // if (ranchAccess.hasRole(PLRole.DATA_EDIT) && ranchAccess.hasRole(PLRole.APP_ADMIN)) {
-        //     List<Card> cardList = ranchRepository.findAll();
-        //     Iterator<Card> i = cardList.iterator();
-        //     Integer numErrors = 0;
-        //     Card temp;
-        //     String machineTypeCrew = "machinelegacy";
-        //     String handTypeCrew = "handlegacy";
-        //     while (i.hasNext()) {
-        //         temp = i.next();
-        //         if (temp.getThinDate() != null) {
-        //             ThinHoeCrew thinEntry = new ThinHoeCrew();
-        //             thinEntry.setDate(temp.getThinDate());
-        //             thinEntry.setHoursWorked(0f);
-        //             thinEntry.setNumEmployees(0);
-        //             if (temp.getThinTypeString( )== "Hand") {
-        //                 thinEntry.setCrew(handTypeCrew);
-        //             } else {
-        //                 thinEntry.setCrew(machineTypeCrew);
-        //             }
-        //             try {
-        //                 temp.addThinCrew(thinEntry);
-        //             } catch (LimitExceededException e) {
-        //                 numErrors++;
-        //             }
-        //         }
-        //         temp.setThinDate(null);
-        //         temp.setThinType(null);
-        //         if (temp.getHoeDate() != null) {
-        //             ThinHoeCrew hoeEntry = new ThinHoeCrew();
-        //             hoeEntry.setDate(temp.getHoeDate());
-        //             hoeEntry.setHoursWorked(0f);
-        //             hoeEntry.setNumEmployees(0);
-        //             if (temp.getHoeTypeString() == "Hand") {
-        //                 hoeEntry.setCrew(handTypeCrew);
-        //             } else {
-        //                 hoeEntry.setCrew(machineTypeCrew);
-        //             }
-        //             try {
-        //                 temp.addHoeCrew(hoeEntry);
-        //             } catch (LimitExceededException e) {
-        //                 numErrors++;
-        //             }
-        //         }
-        //         temp.setHoeDate(null);
-        //         temp.setHoeType(null);
-        //         ranchRepository.save(temp);
-        //     }
-        //     System.out.println("Cards were updated, " + numErrors + " error(s) occured");
-        //     return new RestSuccess();
-        // } else return new RestFailure("Failed to update all cards");
     }
 
     @PutMapping("/ranches/{id}")
-    @ApiOperation(value = "Overwrite a card by it's ID.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Overwrite a card by it's ID.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO updateRanchData(@PathVariable("id") String id, @Valid @RequestBody Card ranch) {
         Optional<Card> card = ranchRepository.findById(id);
         PLRole[] dataRoles = {PLRole.DATA_VIEW, PLRole.DATA_EDIT};
@@ -131,7 +80,7 @@ public class CardEditController {
     }
 
     @DeleteMapping("/ranches/{id}")
-    @ApiOperation(value = "Delete a card.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Delete a card.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO deleteRanchData(@PathVariable("id") String id){
         if (ranchAccess.hasRole(PLRole.DATA_EDIT) || ranchAccess.hasRole(PLRole.CONTRACTOR_EDIT)) {
             Optional<RestDTO> data = ranchRepository.findById(id)
@@ -144,7 +93,7 @@ public class CardEditController {
     }
 
     @PutMapping("/ranches/{id}/setComments")
-    @ApiOperation(value = "Adds a comment to a card", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Adds a comment to a card", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO setComments(@PathVariable("id") String id, @Valid @RequestBody List<Comment> comments) {
         if (ranchAccess.hasRole(PLRole.DATA_VIEW) || ranchAccess.hasRole(PLRole.CONTRACTOR_VIEW)
         || ranchAccess.hasRole(PLRole.SHIPPER)) {
@@ -160,7 +109,7 @@ public class CardEditController {
     }
 
     @PutMapping("/ranches/{id}/setThinning")
-    @ApiOperation(value = "Set the card's thinning entries", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Set the card's thinning entries", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO setThinning(@PathVariable("id") String id, @Valid @RequestBody List<ThinHoeCrew> thinCrews) {
         if (ranchAccess.hasRole(PLRole.TH_EDIT)) {
             Optional<RestDTO> data = ranchRepository.findById(id)
@@ -179,7 +128,7 @@ public class CardEditController {
     }
 
     @PutMapping("/ranches/{id}/setHoeing")
-    @ApiOperation(value = "Set the card's hoeing entries", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Set the card's hoeing entries", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO setHoeing(@PathVariable("id") String id, @Valid @RequestBody List<ThinHoeCrew> hoeCrews) {
         if (ranchAccess.hasRole(PLRole.TH_EDIT)) {
             Optional<RestDTO> data = ranchRepository.findById(id)
@@ -198,7 +147,7 @@ public class CardEditController {
     }
 
     @PutMapping("/ranches/{id}/state")
-    @ApiOperation(value = "Toggle the state of a card between closed/open.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Toggle the state of a card between closed/open.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO setRanchDataState(@PathVariable("id") String id, @RequestParam Boolean closed) {
         if (ranchAccess.hasRole(PLRole.DATA_EDIT) || ranchAccess.hasRole(PLRole.CONTRACTOR_EDIT)) {
             Optional<RestDTO> data = ranchRepository.findById(id)
