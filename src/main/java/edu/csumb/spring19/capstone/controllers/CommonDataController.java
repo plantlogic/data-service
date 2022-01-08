@@ -7,8 +7,8 @@ import edu.csumb.spring19.capstone.dto.RestSuccess;
 import edu.csumb.spring19.capstone.models.common.CommonData;
 import edu.csumb.spring19.capstone.models.common.CommonInitService;
 import edu.csumb.spring19.capstone.repos.CommonRepository;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +29,7 @@ public class CommonDataController{
 
     @GetMapping("/common/{id}")
     @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT', 'SHIPPER', 'IRRIGATOR', 'TH_EDIT', 'TH_VIEW')")
-    @ApiOperation(value = "Get common data by category.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get common data by category.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getCommonData(@PathVariable("id") String id) {
         Optional<CommonData> data = commonRepository.findById(id);
         if (data.isPresent()) return new RestData<>(data);
@@ -38,14 +38,14 @@ public class CommonDataController{
 
     @GetMapping("/common")
     @PreAuthorize("hasAnyRole('DATA_ENTRY', 'DATA_EDIT', 'DATA_VIEW', 'APP_ADMIN', 'USER_MANAGEMENT', 'SHIPPER', 'IRRIGATOR', 'TH_EDIT', 'TH_VIEW')")
-    @ApiOperation(value = "Get all possible common data combinations.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Get all possible common data combinations.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO getAllCommonData() {
         return new RestData<>(commonRepository.findAll());
     }
 
     @PutMapping({"/admin/common"})
     @PreAuthorize("hasRole('APP_ADMIN')")
-    @ApiOperation(value = "Update common data by category.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Update common data by category.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO updateCommonData(@RequestBody CommonData common) {
         Optional<RestDTO> data = commonRepository.findById(common.getKey())
               .map(commonData -> {
@@ -57,7 +57,7 @@ public class CommonDataController{
 
     @DeleteMapping({"/admin/reset"})
     @PreAuthorize("hasRole('APP_ADMIN')")
-    @ApiOperation(value = "Deletes all common data and resets categories.", authorizations = {@Authorization(value = "Bearer")})
+    @Operation(summary = "Deletes all common data and resets categories.", security = {@SecurityRequirement(name = "Bearer")})
     public RestDTO resetCommonData() {
         if (allowReset) {
             commonRepository.deleteAll();

@@ -69,7 +69,7 @@ public class RanchAccess {
         String unsignedToken = token.substring(0, token.lastIndexOf('.') + 1);
 
         String list = String.valueOf(
-              Jwts.parser().parseClaimsJwt(unsignedToken).getBody().get("auth", LinkedHashMap.class).get("ranchAccess")
+              Jwts.parserBuilder().build().parseClaimsJwt(unsignedToken).getBody().get("auth", LinkedHashMap.class).get("ranchAccess")
         );
 
         list = list.substring(1, list.length() - 1);

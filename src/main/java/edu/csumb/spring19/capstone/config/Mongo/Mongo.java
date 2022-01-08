@@ -1,16 +1,18 @@
 package edu.csumb.spring19.capstone.config.Mongo;
 
-import com.mongodb.MongoClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+
 @Configuration
-public class Mongo extends AbstractMongoConfiguration {
+public class Mongo extends AbstractMongoClientConfiguration {
     @Value("${spring.data.mongodb.host:datadb}")
     private String host;
     @Value("${spring.data.mongodb.database:datadb}")
@@ -20,8 +22,8 @@ public class Mongo extends AbstractMongoConfiguration {
     private final List<Converter<?, ?>> converters = new ArrayList<>();
 
     @Override
-    public MongoClient mongoClient() {
-        return new MongoClient(host, port);
+    public MongoClient mongoClient() {        
+        return MongoClients.create("mongodb://" + host + ":" + port);
     }
 
     @Override
